@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SortPics.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="picturesPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">\OneDrive\Camera Uploads\</Value>
+    </Setting>
+    <Setting Name="destinationPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">\OneDrive\photos\</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
