@@ -1,7 +1,6 @@
 ﻿using System;
-using static System.Console;
 
-namespace SortPics
+namespace SortPics.Common
 {
     internal class Common
     {
@@ -12,7 +11,7 @@ namespace SortPics
         public static void Die(string msg = null)
         {
             if (msg != null)
-                WriteLine($"ERROR: {msg}");
+                Console.WriteLine($"ERROR: {msg}");
             Environment.Exit(1);
         }
     }

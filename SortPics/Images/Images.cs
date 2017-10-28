@@ -1,11 +1,32 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using SortPics.Properties;
 
-namespace SortPics
+namespace SortPics.Images
 {
-    internal class MoveImage
+    internal class Images
     {
+        /// <summary>
+        ///     Find all images in the specified directory.
+        /// </summary>
+        /// <param name="searchPath">Directory that contains images</param>
+        /// <returns>Iterable images list</returns>
+        public static List<Image> FindImages(string searchPath)
+        {
+            var ImagesList = new List<Image>();
+
+            var files = Directory.GetFiles(searchPath, "*.jpg");
+
+            foreach (var fileName in files)
+            {
+                var image = new Image(fileName, File.GetLastWriteTime(fileName), File.GetCreationTime(fileName));
+                ImagesList.Add(image);
+            }
+
+            return ImagesList;
+        }
+
         /// <summary>
         ///     Move one image to the right destination path.
         /// </summary>
@@ -23,14 +44,14 @@ namespace SortPics
 
 
             if (!Directory.Exists(imageDestinationDirectory))
-                Common.Die($"Destination directory '{imageDestinationDirectory}' does not exist!");
+                Common.Common.Die($"Destination directory '{imageDestinationDirectory}' does not exist!");
 
             // source and destination file paths prepared
             // make sure that destination file does not yet exist
             if (File.Exists(imageDestinationPath))
             {
                 Console.WriteLine("Interesting, destination file already exists. A bug?");
-                Common.Die();
+                Common.Common.Die();
             }
             if (dryRun == false)
             {

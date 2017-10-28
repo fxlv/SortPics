@@ -2,7 +2,7 @@
 using CommandLine;
 using CommandLine.Text;
 
-namespace SortPics
+namespace SortPics.Common
 {
     internal class Options
     {

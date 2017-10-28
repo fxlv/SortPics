@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace SortPics
+namespace SortPics.Images
 {
     /// <summary>
     ///     Image object
