@@ -11,7 +11,6 @@ namespace SortPics
 {
     class Program
     {
-
         /// <summary>
         /// Find all images in the specified directory.
         /// </summary>
@@ -32,73 +31,13 @@ namespace SortPics
             return ImagesList;
         }
        
-        
-        /// <summary>
-        /// Exit and optionally print an error message.
-        /// </summary>
-        /// <param name="msg"></param>
-        static void Die(string msg = null)
-        {
-            if (msg != null)
-            {
-                Console.WriteLine($"ERROR: {msg}");
-            }
-            System.Environment.Exit(1);
-        }
-
-        /// <summary>
-        /// Move one image to the right destination path.
-        /// </summary>
-        /// <param name="image"></param>
-        /// <param name="destinationBaseDir"></param>
-        /// <param name="dryRun"></param>
-        static void MoveImage(Image image, string destinationBaseDir, Boolean dryRun = true)
-        {
-            var imageYear = image.ModificationDate.Year; 
-            var settings = new SortPics.Properties.Settings();
-            string profilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            
-            string imageDestinationDirectory = $"{destinationBaseDir}\\{imageYear}";
-            string imageDestinationPath = $"{imageDestinationDirectory}\\{image.FileName}";
-
-          
-            
-            if (!Directory.Exists(imageDestinationDirectory))
-            {
-                Die($"Destination directory '{imageDestinationDirectory}' does not exist!");
-            }
-
-            // source and destination file paths prepared
-            // make sure that destination file does not yet exist
-            if(File.Exists(imageDestinationPath))
-            {
-                Console.WriteLine("Interesting, destination file already exists. A bug?");
-                Die();
-            }
-            if (dryRun == false)
-            {
-                Console.WriteLine($"Moving: {image.FilePath} ==> {imageDestinationPath}");
-                File.Move(image.FilePath, imageDestinationPath);
-            } else
-            {
-                Console.WriteLine($"(dry run) Moving: {image.FilePath} ==> {imageDestinationPath}");
-            }
-        }
-
         static void Main(string[] args)
         {
-
-
             /*
              Todo:
 
             Handle arguments: year, month, day
-
-            Print Usage message when needed.
-
             Allow filtering images according to arguments
-
-            Move images from one directory to another
 
              */
 
@@ -118,7 +57,7 @@ namespace SortPics
             }
             else
             {
-                Die("Invalid options specified, please see above for supported options.");
+                Common.Die("Invalid options specified, please see above for supported options.");
             }
             
             var settings = new SortPics.Properties.Settings();
@@ -143,7 +82,7 @@ namespace SortPics
 
             if (!Directory.Exists(fullPathToPictures))
             {
-                Die($"Source directory '{fullPathToPictures}' does not exist!");
+                Common.Die($"Source directory '{fullPathToPictures}' does not exist!");
             }
 
             Console.WriteLine($"Searching for images in {fullPathToPictures}");
@@ -161,13 +100,13 @@ namespace SortPics
            
             foreach (var image in imagesFiltered)
             {
-                MoveImage(image, destinationBaseDir);
+                MoveImage.Move(image, destinationBaseDir);
             }
             Console.WriteLine("If this looks ok, press any key to continue or Ctrl+C to abort");
             Console.ReadKey();
             foreach (var image in imagesFiltered)
             {
-                MoveImage(image, destinationBaseDir, false);
+                MoveImage.Move(image, destinationBaseDir, false);
             }
 
         }
