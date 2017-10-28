@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using static System.Console;
 
 namespace SortPics
 {
@@ -16,7 +12,7 @@ namespace SortPics
         {
             if (msg != null)
             {
-                Console.WriteLine($"ERROR: {msg}");
+                WriteLine($"ERROR: {msg}");
             }
             System.Environment.Exit(1);
         }

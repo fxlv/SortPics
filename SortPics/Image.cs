@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SortPics
 {
@@ -28,7 +24,7 @@ namespace SortPics
 
         public override string ToString()
         {
-            string stringRepresentation = $"Image: {FileName}";
+            var stringRepresentation = $"Image: {FileName}";
             return stringRepresentation;
         }
     }
