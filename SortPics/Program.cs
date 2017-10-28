@@ -9,9 +9,6 @@ using CommandLine.Text;
 
 namespace SortPics
 {
-
-   
-
     class Program
     {
 
@@ -48,18 +45,23 @@ namespace SortPics
             }
             System.Environment.Exit(1);
         }
+
         /// <summary>
         /// Move one image to the right destination path.
         /// </summary>
         /// <param name="image"></param>
-        static void MoveImage(Image image, Boolean dryRun = true)
+        /// <param name="destinationBaseDir"></param>
+        /// <param name="dryRun"></param>
+        static void MoveImage(Image image, string destinationBaseDir, Boolean dryRun = true)
         {
             var imageYear = image.ModificationDate.Year; 
             var settings = new SortPics.Properties.Settings();
             string profilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            string imageDestinationDirectory = $"{profilePath}\\{settings.destinationPath}\\{imageYear}";
+            
+            string imageDestinationDirectory = $"{destinationBaseDir}\\{imageYear}";
             string imageDestinationPath = $"{imageDestinationDirectory}\\{image.FileName}";
 
+          
             
             if (!Directory.Exists(imageDestinationDirectory))
             {
@@ -122,7 +124,28 @@ namespace SortPics
             var settings = new SortPics.Properties.Settings();
 
             string profilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            // if picturesPath is specified as an argument, use that, if not, use the one from settings
             string fullPathToPictures = $"{profilePath}\\{settings.picturesPath}";
+            string destinationBaseDir = $"{profilePath}\\{settings.destinationPath}";
+
+            if (options.ImagesSourcePath != null)
+            {
+                fullPathToPictures = options.ImagesSourcePath;
+            }
+
+            if (options.ImagesDestinationPath != null)
+            {
+                destinationBaseDir = options.ImagesDestinationPath;
+            }
+                
+          
+            // check that both source and destination paths exist
+
+            if (!Directory.Exists(fullPathToPictures))
+            {
+                Die($"Source directory '{fullPathToPictures}' does not exist!");
+            }
+
             Console.WriteLine($"Searching for images in {fullPathToPictures}");
             var images = FindImages(fullPathToPictures);
             Console.WriteLine($"Filtering by year: {filterYear}");
@@ -138,13 +161,13 @@ namespace SortPics
            
             foreach (var image in imagesFiltered)
             {
-                MoveImage(image);
+                MoveImage(image, destinationBaseDir);
             }
             Console.WriteLine("If this looks ok, press any key to continue or Ctrl+C to abort");
             Console.ReadKey();
             foreach (var image in imagesFiltered)
             {
-                MoveImage(image, false);
+                MoveImage(image, destinationBaseDir, false);
             }
 
         }

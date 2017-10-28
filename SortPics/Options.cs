@@ -19,8 +19,11 @@ namespace SortPics
         [Option('d', "day", Required = false, DefaultValue = null, HelpText = "Filter day")]
         public int FilterDay { get; set; }
 
-        [Option('s', "source", Required = false, DefaultValue = null, HelpText = "Images source path")]
+        [Option("source", Required = false, DefaultValue = null, HelpText = "Images source path")]
         public string ImagesSourcePath { get; set; }
+
+        [Option("destination", Required = false, DefaultValue = null, HelpText = "Images destination path")]
+        public string ImagesDestinationPath { get; set; }
 
         /// <summary>
         /// Construct Usage message.
