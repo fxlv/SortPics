@@ -4,7 +4,7 @@ using CommandLine.Text;
 
 namespace SortPics
 {
-    class Options
+    internal class Options
     {
         [Option('y', "year", Required = true, HelpText = "Filter year")]
         public int FilterYear { get; set; }
@@ -22,7 +22,7 @@ namespace SortPics
         public string ImagesDestinationPath { get; set; }
 
         /// <summary>
-        /// Construct Usage message.
+        ///     Construct Usage message.
         /// </summary>
         /// <returns></returns>
         [HelpOption]
@@ -39,8 +39,9 @@ namespace SortPics
             help.AddOptions(this);
             return help;
         }
+
         /// <summary>
-        /// Print usage message and exit.
+        ///     Print usage message and exit.
         /// </summary>
         /// <param name="msg"></param>
         public void PrintUsage(string msg = null)
@@ -52,9 +53,7 @@ namespace SortPics
             }
             Console.Write(GetUsage());
 
-            System.Environment.Exit(0);
-
-
+            Environment.Exit(0);
         }
     }
 }

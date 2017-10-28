@@ -1,31 +1,29 @@
 ﻿using System;
 using System.IO;
+using SortPics.Properties;
 
 namespace SortPics
 {
-    class MoveImage
+    internal class MoveImage
     {
         /// <summary>
-        /// Move one image to the right destination path.
+        ///     Move one image to the right destination path.
         /// </summary>
         /// <param name="image"></param>
         /// <param name="destinationBaseDir"></param>
         /// <param name="dryRun"></param>
-        public static void Move(Image image, string destinationBaseDir, Boolean dryRun = true)
+        public static void Move(Image image, string destinationBaseDir, bool dryRun = true)
         {
             var imageYear = image.ModificationDate.Year;
-            var settings = new SortPics.Properties.Settings();
-            string profilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            var settings = new Settings();
+            var profilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
-            string imageDestinationDirectory = $"{destinationBaseDir}\\{imageYear}";
-            string imageDestinationPath = $"{imageDestinationDirectory}\\{image.FileName}";
-
+            var imageDestinationDirectory = $"{destinationBaseDir}\\{imageYear}";
+            var imageDestinationPath = $"{imageDestinationDirectory}\\{image.FileName}";
 
 
             if (!Directory.Exists(imageDestinationDirectory))
-            {
                 Common.Die($"Destination directory '{imageDestinationDirectory}' does not exist!");
-            }
 
             // source and destination file paths prepared
             // make sure that destination file does not yet exist

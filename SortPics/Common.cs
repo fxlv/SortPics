@@ -1,20 +1,19 @@
-﻿using static System.Console;
+﻿using System;
+using static System.Console;
 
 namespace SortPics
 {
-    class Common
+    internal class Common
     {
         /// <summary>
-        /// Exit and optionally print an error message.
+        ///     Exit and optionally print an error message.
         /// </summary>
         /// <param name="msg"></param>
         public static void Die(string msg = null)
         {
             if (msg != null)
-            {
                 WriteLine($"ERROR: {msg}");
-            }
-            System.Environment.Exit(1);
+            Environment.Exit(1);
         }
     }
 }
