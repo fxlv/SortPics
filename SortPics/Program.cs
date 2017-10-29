@@ -53,6 +53,11 @@ namespace SortPics
             if (!Directory.Exists(fullPathToPictures))
                 Common.Common.Die($"Source directory '{fullPathToPictures}' does not exist!");
 
+            if (!Directory.Exists(destinationBaseDir))
+                Common.Common.Die($"Destination directory '{destinationBaseDir}' does not exist!");
+
+            // search for images
+
             Console.WriteLine($"Searching for images in {fullPathToPictures}");
             var images = Images.Images.FindImages(fullPathToPictures);
             Console.WriteLine($"Filtering by year: {filterYear}");
