@@ -42,9 +42,27 @@ namespace SortPics.Images
             var imageDestinationDirectory = $"{destinationBaseDir}\\{imageYear}";
             var imageDestinationPath = $"{imageDestinationDirectory}\\{image.FileName}";
 
+            if (!dryRun)
+            {
+                // check if destination directory exists, if it does not, offer to create it
+                if (!Directory.Exists(imageDestinationDirectory))
+                {
+                    Console.WriteLine($"Destination directory {imageDestinationDirectory} doest not exist!");
+                    var response = UserInput.ConfirmContinue("Do you want to create the destination directory?");
+                    if (response)
+                    {
+                        Console.WriteLine($"Creating {imageDestinationDirectory}");
+                        Directory.CreateDirectory(imageDestinationDirectory);
+                    }
+                    else
+                    {
+                        Common.Common.Die($"Destination directory '{imageDestinationDirectory}' does not exist!");
+                    }
 
             if (!Directory.Exists(imageDestinationDirectory))
                 Common.Common.Die($"Destination directory '{imageDestinationDirectory}' does not exist!");
+                }
+            }
 
             // source and destination file paths prepared
             // make sure that destination file does not yet exist
