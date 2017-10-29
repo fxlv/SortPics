@@ -43,8 +43,6 @@ namespace SortPics.Images
             //todo: consider using Path.Combine instead of concatenating strings
 
             if (!dryRun)
-            {
-                // check if destination directory exists, if it does not, offer to create it
                 if (!Directory.Exists(imageDestinationDirectory))
                 {
                     Console.WriteLine($"Destination directory {imageDestinationDirectory} doest not exist!");
@@ -58,9 +56,7 @@ namespace SortPics.Images
                     {
                         Common.Common.Die($"Destination directory '{imageDestinationDirectory}' does not exist!");
                     }
-
                 }
-            }
 
             // source and destination file paths prepared
             // make sure that destination file does not yet exist
@@ -71,14 +67,9 @@ namespace SortPics.Images
                 var destinationHash = FileHash.GetMd5Hash(imageDestinationPath);
                 var sourceHash = FileHash.GetMd5Hash(image.FilePath);
                 if (destinationHash == sourceHash)
-                {
                     Console.WriteLine("Source and destination files are the same!");
-                    
-                }
                 else
-                {
                     Console.WriteLine("Source and destination files names are the same, but contents are different!");
-                }
                 Common.Common.Die($"Error while moving {image.FileName}");
             }
             if (dryRun == false)
