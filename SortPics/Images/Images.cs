@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using SortPics.Properties;
+using SortPics.Common;
 
 namespace SortPics.Images
 {
@@ -36,11 +36,11 @@ namespace SortPics.Images
         public static void Move(Image image, string destinationBaseDir, bool dryRun = true)
         {
             var imageYear = image.ModificationDate.Year;
-            var settings = new Settings();
-            var profilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
 
             var imageDestinationDirectory = $"{destinationBaseDir}\\{imageYear}";
             var imageDestinationPath = $"{imageDestinationDirectory}\\{image.FileName}";
+            //todo: consider using Path.Combine instead of concatenating strings
 
             if (!dryRun)
             {
@@ -59,17 +59,27 @@ namespace SortPics.Images
                         Common.Common.Die($"Destination directory '{imageDestinationDirectory}' does not exist!");
                     }
 
-            if (!Directory.Exists(imageDestinationDirectory))
-                Common.Common.Die($"Destination directory '{imageDestinationDirectory}' does not exist!");
                 }
             }
 
             // source and destination file paths prepared
             // make sure that destination file does not yet exist
+            // if it does exist, check if both source and destination files are the same
             if (File.Exists(imageDestinationPath))
             {
-                Console.WriteLine("Interesting, destination file already exists. A bug?");
-                Common.Common.Die();
+                Console.WriteLine("Interesting, destination file already exists. Will check the hash.");
+                var destinationHash = FileHash.GetMd5Hash(imageDestinationPath);
+                var sourceHash = FileHash.GetMd5Hash(image.FilePath);
+                if (destinationHash == sourceHash)
+                {
+                    Console.WriteLine("Source and destination files are the same!");
+                    
+                }
+                else
+                {
+                    Console.WriteLine("Source and destination files names are the same, but contents are different!");
+                }
+                Common.Common.Die($"Error while moving {image.FileName}");
             }
             if (dryRun == false)
             {
