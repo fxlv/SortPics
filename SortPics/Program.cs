@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using CommandLine;
 using SortPics.Common;
 using SortPics.Images;
@@ -11,8 +11,6 @@ namespace SortPics
 {
     internal class Program
     {
-
-
         private static void Main(string[] args)
         {
             // set up default filter settings
@@ -35,7 +33,6 @@ namespace SortPics
             }
 
             var settings = new Settings();
-
             var profilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             // if picturesPath is specified as an argument, use that, if not, use the one from settings
             var fullPathToPictures = $"{profilePath}\\{settings.picturesPath}";
@@ -73,10 +70,18 @@ namespace SortPics
 
             foreach (var image in imagesFiltered)
                 Images.Images.Move(image, destinationBaseDir);
-            Console.WriteLine("If this looks ok, press any key to continue or Ctrl+C to abort");
-            Console.ReadKey();
-            foreach (var image in imagesFiltered)
-                Images.Images.Move(image, destinationBaseDir, false);
+
+            var response = UserInput.ConfirmContinue("Do you want to continue and move these images?");
+            if (response)
+            {
+                foreach (var image in imagesFiltered)
+                    Images.Images.Move(image, destinationBaseDir, false);
+            }
+            else
+            {
+                Console.WriteLine("Move aborted.");
+                Environment.Exit(0);
+            }
         }
     }
 }
