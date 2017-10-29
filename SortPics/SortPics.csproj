@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Common.cs" />
+    <Compile Include="Common\FileHash.cs" />
     <Compile Include="Common\UserInput.cs" />
     <Compile Include="Images\Image.cs" />
     <Compile Include="Images\Images.cs" />
