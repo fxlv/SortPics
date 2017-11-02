@@ -58,43 +58,13 @@ namespace SortPics
             Console.WriteLine($"Searching for images in {fullPathToPictures}");
             var images = Images.Images.FindImages(fullPathToPictures);
 
-
-            // if filtering options have been provided, filter accordingly
-            // if no filters are provided, skip this step and work on the full set of pictures
-            List<Image> imagesFiltered;
-            if (filterYear > 0)
-            {
-                Console.WriteLine($"Filtering by year: {filterYear}");
-                imagesFiltered = images.OfType<Image>().Where(s => s.ModificationDate.Year == filterYear).ToList();
-
-                // if a month has been prvided as well, narrow it down to that month
-                if (filterMonth > 0)
-                {
-                    Console.WriteLine($"Filtering by month: {filterMonth}");
-                    imagesFiltered = images.OfType<Image>().Where(s => s.ModificationDate.Month == filterMonth).ToList();
-
-                    // if a day has been specified as well, narrow it down to that day
-                    if(filterDay > 0)
-                    {
-                        Console.WriteLine($"Filtering by day: {filterDay}");
-                        imagesFiltered = images.OfType<Image>().Where(s => s.ModificationDate.Day == filterDay).ToList();
-                    }
-                }
-            }
-            else
-            {
-                imagesFiltered = images;
-            }
+            var imagesFiltered = Images.Images.FilterImages(images, filterYear, filterMonth, filterDay);
             if (imagesFiltered.Count == 0)
             {
                 Console.WriteLine("No images found matching the filter criteria");
                 Environment.Exit(0);
             }
             Console.WriteLine($" {imagesFiltered.Count} images found");
-
-
-            
-
 
             // present to the user the picture list and ask for confirmation to move
             foreach (var image in imagesFiltered)

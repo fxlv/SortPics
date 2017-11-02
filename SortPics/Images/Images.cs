@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using SortPics.Common;
 
 namespace SortPics.Images
@@ -81,6 +82,42 @@ namespace SortPics.Images
             {
                 Console.WriteLine($"(dry run) Moving: {image.FilePath} ==> {imageDestinationPath}");
             }
+        }
+        /// <summary>
+        /// Iteratively filter images based on year, month, day.
+        /// </summary>
+        /// <param name="images"></param>
+        /// <param name="filterYear"></param>
+        /// <param name="filterMonth"></param>
+        /// <param name="filterDay"></param>
+        /// <returns>List of filtered images</returns>
+        public static List<Image> FilterImages(List<Image> images, int filterYear, int filterMonth, int filterDay)
+        {
+            List<Image> imagesFiltered;
+            if (filterYear > 0)
+            {
+                Console.WriteLine($"Filtering by year: {filterYear}");
+                imagesFiltered = images.OfType<Image>().Where(s => s.ModificationDate.Year == filterYear).ToList();
+
+                // if a month has been prvided as well, narrow it down to that month
+                if (filterMonth > 0)
+                {
+                    Console.WriteLine($"Filtering by month: {filterMonth}");
+                    imagesFiltered = images.OfType<Image>().Where(s => s.ModificationDate.Month == filterMonth).ToList();
+
+                    // if a day has been specified as well, narrow it down to that day
+                    if (filterDay > 0)
+                    {
+                        Console.WriteLine($"Filtering by day: {filterDay}");
+                        imagesFiltered = images.OfType<Image>().Where(s => s.ModificationDate.Day == filterDay).ToList();
+                    }
+                }
+            }
+            else
+            {
+                imagesFiltered = images;
+            }
+            return imagesFiltered;
         }
     }
 }
