@@ -12,7 +12,7 @@ namespace SortPics
         {
             // set up default filter settings
             var filterYear = 0;
-            var filterMonth = 0; 
+            var filterMonth = 0;
             var filterDay = 0;
 
             // Parse arguments using CommandLine module

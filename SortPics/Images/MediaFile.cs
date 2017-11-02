@@ -4,11 +4,11 @@ using System.IO;
 namespace SortPics.Images
 {
     /// <summary>
-    ///     Image object
+    ///     Media file
     /// </summary>
-    internal class Image
+    internal class MediaFile
     {
-        public Image(string path)
+        public MediaFile(string path)
         {
             FilePath = path;
             FileName = Path.GetFileName(FilePath);
@@ -23,7 +23,7 @@ namespace SortPics.Images
 
         public override string ToString()
         {
-            var stringRepresentation = $"Image: {FileName}";
+            var stringRepresentation = $"Media file: {FileName}";
             return stringRepresentation;
         }
     }

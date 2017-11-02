@@ -45,16 +45,16 @@ namespace SortPics.Images
         /// </summary>
         /// <param name="searchPath">Directory that contains images</param>
         /// <returns>Iterable images list</returns>
-        public static List<Image> FindImages(string searchPath)
+        public static List<MediaFile> FindImages(string searchPath)
         {
-            var ImagesList = new List<Image>();
+            var ImagesList = new List<MediaFile>();
 
             var files = Directory.GetFiles(searchPath);
 
             foreach (var fileName in files)
                 if (IsImage(fileName))
                 {
-                    var image = new Image(fileName);
+                    var image = new MediaFile(fileName);
                     ImagesList.Add(image);
                 }
                 else
@@ -70,7 +70,7 @@ namespace SortPics.Images
         /// <param name="image"></param>
         /// <param name="destinationBaseDir"></param>
         /// <param name="dryRun"></param>
-        public static void Move(Image image, string destinationBaseDir, bool dryRun = true)
+        public static void Move(MediaFile image, string destinationBaseDir, bool dryRun = true)
         {
             var imageYear = image.ModificationDate.Year.ToString();
             var imageMonth = image.ModificationDate.Month.ToString().PadLeft(2, '0');
@@ -127,7 +127,7 @@ namespace SortPics.Images
         /// <param name="filterMonth"></param>
         /// <param name="filterDay"></param>
         /// <returns>List of filtered images</returns>
-        public static List<Image> FilterImages(List<Image> images, int filterYear, int filterMonth, int filterDay)
+        public static List<MediaFile> FilterImages(List<MediaFile> images, int filterYear, int filterMonth, int filterDay)
         {
             // return all images by default
             var imagesFiltered = images;
@@ -135,20 +135,20 @@ namespace SortPics.Images
             if (filterYear > 0)
             {
                 Console.WriteLine($"Filtering by year: {filterYear}");
-                imagesFiltered = images.OfType<Image>().Where(s => s.ModificationDate.Year == filterYear).ToList();
+                imagesFiltered = images.OfType<MediaFile>().Where(s => s.ModificationDate.Year == filterYear).ToList();
 
                 // if a month has been prvided as well, narrow it down to that month
                 if (filterMonth > 0)
                 {
                     Console.WriteLine($"Filtering by month: {filterMonth}");
-                    imagesFiltered = images.OfType<Image>().Where(s => s.ModificationDate.Month == filterMonth)
+                    imagesFiltered = images.OfType<MediaFile>().Where(s => s.ModificationDate.Month == filterMonth)
                         .ToList();
 
                     // if a day has been specified as well, narrow it down to that day
                     if (filterDay > 0)
                     {
                         Console.WriteLine($"Filtering by day: {filterDay}");
-                        imagesFiltered = images.OfType<Image>().Where(s => s.ModificationDate.Day == filterDay)
+                        imagesFiltered = images.OfType<MediaFile>().Where(s => s.ModificationDate.Day == filterDay)
                             .ToList();
                     }
                 }
