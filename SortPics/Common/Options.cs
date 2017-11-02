@@ -6,7 +6,9 @@ namespace SortPics.Common
 {
     internal class Options
     {
-        [Option('y', "year", Required = true, HelpText = "Filter year")]
+        [Option('y', "year", Required = false, DefaultValue = null, HelpText = "Filter year")]
+        //todo: only accept valid years 
+        //todo: don't accept negative numbers
         public int FilterYear { get; set; }
 
         [Option('m', "month", Required = false, DefaultValue = null, HelpText = "Filter month")]

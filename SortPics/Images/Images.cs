@@ -16,11 +16,11 @@ namespace SortPics.Images
         {
             var ImagesList = new List<Image>();
 
-            var files = Directory.GetFiles(searchPath, "*.jpg");
+            var files = Directory.GetFiles(searchPath, "*.jpg"); // todo: support more image file formats
 
             foreach (var fileName in files)
             {
-                var image = new Image(fileName, File.GetLastWriteTime(fileName), File.GetCreationTime(fileName));
+                var image = new Image(fileName, File.GetLastWriteTime(fileName), File.GetCreationTime(fileName)); //todo: getting the date could be done in Image() constructor, not here
                 ImagesList.Add(image);
             }
 
