@@ -38,10 +38,10 @@ namespace SortPics.Images
         /// <param name="dryRun"></param>
         public static void Move(Image image, string destinationBaseDir, bool dryRun = true)
         {
-            var imageYear = image.ModificationDate.Year;
+            var imageYear = image.ModificationDate.Year.ToString();
+            var imageMonth = image.ModificationDate.Month.ToString().PadLeft(2, '0');
 
-
-            var imageDestinationDirectory = Path.Combine(destinationBaseDir, imageYear.ToString());
+            var imageDestinationDirectory = Path.Combine(destinationBaseDir, imageYear, imageMonth);
             var imageDestinationPath = Path.Combine(imageDestinationDirectory, image.FileName);
 
             if (!dryRun)
