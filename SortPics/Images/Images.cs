@@ -2,29 +2,42 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using SortPics.Common;
 using System.Web;
+using SortPics.Common;
 
 namespace SortPics.Images
 {
     internal class Images
     {
         /// <summary>
-        /// Check if the file is an image based on its MIME type
+        ///     Check if the file is an image based on its MIME type
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
         public static bool IsImage(string fileName)
         {
-            List<string> supportedMimeTypes = new List<string>();
+            var supportedMimeTypes = new List<string>();
             supportedMimeTypes.Add("image/jpeg");
             supportedMimeTypes.Add("image/png");
+            supportedMimeTypes.Add("image/gif");
 
             var mime = MimeMapping.GetMimeMapping(fileName);
             if (supportedMimeTypes.Contains(mime))
                 return true;
+            Console.WriteLine($"Unknown file {fileName} with mime type: {mime}");
             return false;
-            
+        }
+
+        public static bool IsVideo(string fileName)
+        {
+            var supportedMimeTypes = new List<string>();
+            supportedMimeTypes.Add("video/quicktime");
+
+            var mime = MimeMapping.GetMimeMapping(fileName);
+            if (supportedMimeTypes.Contains(mime))
+                return true;
+            Console.WriteLine($"Unknown file {fileName} with mime type: {mime}");
+            return false;
         }
 
         /// <summary>
@@ -39,19 +52,15 @@ namespace SortPics.Images
             var files = Directory.GetFiles(searchPath);
 
             foreach (var fileName in files)
-            {
                 if (IsImage(fileName))
                 {
-                    var image = new Image(fileName, File.GetLastWriteTime(fileName),
-                        File.GetCreationTime(
-                            fileName)); //todo: getting the date could be done in Image() constructor, not here
+                    var image = new Image(fileName);
                     ImagesList.Add(image);
                 }
                 else
                 {
                     Console.WriteLine($"Ignoring {fileName}");
                 }
-            }
             return ImagesList;
         }
 
@@ -121,7 +130,7 @@ namespace SortPics.Images
         public static List<Image> FilterImages(List<Image> images, int filterYear, int filterMonth, int filterDay)
         {
             // return all images by default
-            List<Image> imagesFiltered = images;
+            var imagesFiltered = images;
             // do actual filtering
             if (filterYear > 0)
             {

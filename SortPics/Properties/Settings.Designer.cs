@@ -26,24 +26,36 @@ namespace SortPics.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("OneDrive\\Camera Uploads")]
-        public string picturesPath {
+        public string sourcePath {
             get {
-                return ((string)(this["picturesPath"]));
+                return ((string)(this["sourcePath"]));
             }
             set {
-                this["picturesPath"] = value;
+                this["sourcePath"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("OneDrive\\photos")]
-        public string destinationPath {
+        public string photosDestinationPath {
             get {
-                return ((string)(this["destinationPath"]));
+                return ((string)(this["photosDestinationPath"]));
             }
             set {
-                this["destinationPath"] = value;
+                this["photosDestinationPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("OneDrive\\video")]
+        public string videosDestinationPath {
+            get {
+                return ((string)(this["videosDestinationPath"]));
+            }
+            set {
+                this["videosDestinationPath"] = value;
             }
         }
     }

@@ -2,11 +2,14 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SortPics.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="picturesPath" Type="System.String" Scope="User">
+    <Setting Name="sourcePath" Type="System.String" Scope="User">
       <Value Profile="(Default)">OneDrive\Camera Uploads</Value>
     </Setting>
-    <Setting Name="destinationPath" Type="System.String" Scope="User">
+    <Setting Name="photosDestinationPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">OneDrive\photos</Value>
+    </Setting>
+    <Setting Name="videosDestinationPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">OneDrive\video</Value>
     </Setting>
   </Settings>
 </SettingsFile>
