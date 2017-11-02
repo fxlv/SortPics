@@ -32,8 +32,8 @@ namespace SortPics
             var settings = new Settings();
             var profilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             // if picturesPath is specified as an argument, use that, if not, use the one from settings
-            var fullPathToPictures = $"{profilePath}\\{settings.picturesPath}";
-            var destinationBaseDir = $"{profilePath}\\{settings.destinationPath}";
+            var fullPathToPictures = Path.Combine(profilePath, settings.picturesPath);
+            var destinationBaseDir = Path.Combine(profilePath, settings.destinationPath);
 
             // user can override source and destination directories via Options
             if (options.ImagesSourcePath != null)

@@ -41,9 +41,8 @@ namespace SortPics.Images
             var imageYear = image.ModificationDate.Year;
 
 
-            var imageDestinationDirectory = $"{destinationBaseDir}\\{imageYear}";
-            var imageDestinationPath = $"{imageDestinationDirectory}\\{image.FileName}";
-            //todo: consider using Path.Combine instead of concatenating strings
+            var imageDestinationDirectory = Path.Combine(destinationBaseDir, imageYear.ToString());
+            var imageDestinationPath = Path.Combine(imageDestinationDirectory, image.FileName);
 
             if (!dryRun)
                 if (!Directory.Exists(imageDestinationDirectory))

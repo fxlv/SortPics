@@ -3,10 +3,10 @@
   <Profiles />
   <Settings>
     <Setting Name="picturesPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">\OneDrive\Camera Uploads\</Value>
+      <Value Profile="(Default)">OneDrive\Camera Uploads</Value>
     </Setting>
     <Setting Name="destinationPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">\OneDrive\photos\</Value>
+      <Value Profile="(Default)">OneDrive\photos</Value>
     </Setting>
   </Settings>
 </SettingsFile>

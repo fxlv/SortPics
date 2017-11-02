@@ -25,7 +25,7 @@ namespace SortPics.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\\OneDrive\\Camera Uploads\\")]
+        [global::System.Configuration.DefaultSettingValueAttribute("OneDrive\\Camera Uploads")]
         public string picturesPath {
             get {
                 return ((string)(this["picturesPath"]));
@@ -37,7 +37,7 @@ namespace SortPics.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\\OneDrive\\photos\\")]
+        [global::System.Configuration.DefaultSettingValueAttribute("OneDrive\\photos")]
         public string destinationPath {
             get {
                 return ((string)(this["destinationPath"]));
