@@ -8,12 +8,12 @@ namespace SortPics.Images
     /// </summary>
     internal class Image
     {
-        public Image(string path, DateTime modificationDate, DateTime creationDate)
+        public Image(string path)
         {
             FilePath = path;
             FileName = Path.GetFileName(FilePath);
-            ModificationDate = modificationDate;
-            CreationDate = creationDate;
+            ModificationDate=  File.GetLastWriteTime(FilePath);
+            CreationDate = File.GetCreationTime(FilePath);
         }
 
         public string FilePath { set; get; }
