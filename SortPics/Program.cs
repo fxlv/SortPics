@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using CommandLine;
 using SortPics.Common;
-using SortPics.Images;
 using SortPics.Properties;
 
 namespace SortPics

@@ -21,7 +21,9 @@ namespace SortPics.Images
 
             foreach (var fileName in files)
             {
-                var image = new Image(fileName, File.GetLastWriteTime(fileName), File.GetCreationTime(fileName)); //todo: getting the date could be done in Image() constructor, not here
+                var image = new Image(fileName, File.GetLastWriteTime(fileName),
+                    File.GetCreationTime(
+                        fileName)); //todo: getting the date could be done in Image() constructor, not here
                 ImagesList.Add(image);
             }
 
@@ -83,8 +85,9 @@ namespace SortPics.Images
                 Console.WriteLine($"(dry run) Moving: {image.FilePath} ==> {imageDestinationPath}");
             }
         }
+
         /// <summary>
-        /// Iteratively filter images based on year, month, day.
+        ///     Iteratively filter images based on year, month, day.
         /// </summary>
         /// <param name="images"></param>
         /// <param name="filterYear"></param>
@@ -103,13 +106,15 @@ namespace SortPics.Images
                 if (filterMonth > 0)
                 {
                     Console.WriteLine($"Filtering by month: {filterMonth}");
-                    imagesFiltered = images.OfType<Image>().Where(s => s.ModificationDate.Month == filterMonth).ToList();
+                    imagesFiltered = images.OfType<Image>().Where(s => s.ModificationDate.Month == filterMonth)
+                        .ToList();
 
                     // if a day has been specified as well, narrow it down to that day
                     if (filterDay > 0)
                     {
                         Console.WriteLine($"Filtering by day: {filterDay}");
-                        imagesFiltered = images.OfType<Image>().Where(s => s.ModificationDate.Day == filterDay).ToList();
+                        imagesFiltered = images.OfType<Image>().Where(s => s.ModificationDate.Day == filterDay)
+                            .ToList();
                     }
                 }
             }
