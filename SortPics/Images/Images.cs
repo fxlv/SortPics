@@ -3,11 +3,30 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using SortPics.Common;
+using System.Web;
 
 namespace SortPics.Images
 {
     internal class Images
     {
+        /// <summary>
+        /// Check if the file is an image based on its MIME type
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static bool IsImage(string fileName)
+        {
+            List<string> supportedMimeTypes = new List<string>();
+            supportedMimeTypes.Add("image/jpeg");
+            supportedMimeTypes.Add("image/png");
+
+            var mime = MimeMapping.GetMimeMapping(fileName);
+            if (supportedMimeTypes.Contains(mime))
+                return true;
+            return false;
+            
+        }
+
         /// <summary>
         ///     Find all images in the specified directory.
         /// </summary>
@@ -17,16 +36,22 @@ namespace SortPics.Images
         {
             var ImagesList = new List<Image>();
 
-            var files = Directory.GetFiles(searchPath, "*.jpg"); // todo: support more image file formats
+            var files = Directory.GetFiles(searchPath);
 
             foreach (var fileName in files)
             {
-                var image = new Image(fileName, File.GetLastWriteTime(fileName),
-                    File.GetCreationTime(
-                        fileName)); //todo: getting the date could be done in Image() constructor, not here
-                ImagesList.Add(image);
+                if (IsImage(fileName))
+                {
+                    var image = new Image(fileName, File.GetLastWriteTime(fileName),
+                        File.GetCreationTime(
+                            fileName)); //todo: getting the date could be done in Image() constructor, not here
+                    ImagesList.Add(image);
+                }
+                else
+                {
+                    Console.WriteLine($"Ignoring {fileName}");
+                }
             }
-
             return ImagesList;
         }
 
