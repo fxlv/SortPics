@@ -96,7 +96,9 @@ namespace SortPics.Images
         /// <returns>List of filtered images</returns>
         public static List<Image> FilterImages(List<Image> images, int filterYear, int filterMonth, int filterDay)
         {
-            List<Image> imagesFiltered;
+            // return all images by default
+            List<Image> imagesFiltered = images;
+            // do actual filtering
             if (filterYear > 0)
             {
                 Console.WriteLine($"Filtering by year: {filterYear}");
@@ -117,10 +119,6 @@ namespace SortPics.Images
                             .ToList();
                     }
                 }
-            }
-            else
-            {
-                imagesFiltered = images;
             }
             return imagesFiltered;
         }
