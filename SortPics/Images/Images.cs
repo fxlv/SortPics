@@ -7,7 +7,7 @@ using SortPics.Common;
 
 namespace SortPics.Images
 {
-    internal class Images
+    public class Images
     {
         /// <summary>
         /// Return MIME type as string.

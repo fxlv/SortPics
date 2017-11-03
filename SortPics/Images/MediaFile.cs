@@ -9,7 +9,7 @@ namespace SortPics.Images
     /// <summary>
     ///     Media file
     /// </summary>
-    internal class MediaFile
+    public class MediaFile
     {
         public MediaFile(string path)
         {
