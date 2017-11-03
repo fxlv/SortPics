@@ -59,4 +59,43 @@ public class MediaFilesTest
         Assert.AreEqual(testImagePng.GpsLongitude, "-122° 29' 51.49\"");
 
     }
+
+    [Test]
+    public void TestFilteringByYear()
+    {
+        var imagesFiltered = SortPics.Images.Images.FilterImages(images, 2017, 0, 0);
+        Assert.AreEqual(5, imagesFiltered.Count);
+
+    }
+
+    [Test]
+    public void TestFilteringByYearAndMonthShouldBeOne()
+    {
+        var imagesFiltered = SortPics.Images.Images.FilterImages(images, 2017, 1, 0);
+        Assert.AreEqual(1, imagesFiltered.Count);
+
+    }
+
+    [Test]
+    public void TestFilteringByYearAndMonthShouldBeZero()
+    {
+        var imagesFiltered = SortPics.Images.Images.FilterImages(images, 2017, 5, 0);
+        Assert.AreEqual(0, imagesFiltered.Count);
+
+    }
+
+    [Test]
+    public void TestFilteringByYearAndMonth()
+    {
+        var imagesFiltered = SortPics.Images.Images.FilterImages(images, 2017, 2, 0);
+        Assert.AreEqual(2, imagesFiltered.Count);
+
+    }
+
+    [Test]
+    public void TestMediaFileStringRepresentation()
+    {
+        var testImagePng = images.Where(s => s.FileName == "computer-2893112_640.png").FirstOrDefault();
+        Assert.AreEqual(testImagePng.ToString(), "Media file: computer-2893112_640.png");
+    }
 }
