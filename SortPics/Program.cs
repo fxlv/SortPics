@@ -32,30 +32,37 @@ namespace SortPics
             var settings = new Settings();
             var profilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             // if picturesPath is specified as an argument, use that, if not, use the one from settings
-            var fullPathToPictures = Path.Combine(profilePath, settings.sourcePath);
-            var destinationBaseDir = Path.Combine(profilePath, settings.photosDestinationPath);
+            var fullPathToMedia = Path.Combine(profilePath, settings.sourcePath);
+            var destinationBaseDirPhotos = Path.Combine(profilePath, settings.photosDestinationPath);
+            var destinationBaseDirVideos = Path.Combine(profilePath, settings.videosDestinationPath);
 
             // user can override source and destination directories via Options
             if (options.ImagesSourcePath != null)
-                fullPathToPictures = options.ImagesSourcePath;
+                fullPathToMedia = options.ImagesSourcePath;
 
             if (options.ImagesDestinationPath != null)
-                destinationBaseDir = options.ImagesDestinationPath;
+            {
+                destinationBaseDirPhotos = options.ImagesDestinationPath;
+                destinationBaseDirVideos = options.ImagesDestinationPath;
+            }
 
 
             // check that both source and destination paths exist
-            if (!Directory.Exists(fullPathToPictures))
-                Common.Common.Die($"Source directory '{fullPathToPictures}' does not exist!");
+            if (!Directory.Exists(fullPathToMedia))
+                Common.Common.Die($"Source directory '{fullPathToMedia}' does not exist!");
 
-            if (!Directory.Exists(destinationBaseDir))
-                Common.Common.Die($"Destination directory '{destinationBaseDir}' does not exist!");
+            if (!Directory.Exists(destinationBaseDirPhotos))
+                Common.Common.Die($"Destination directory '{destinationBaseDirPhotos}' does not exist!");
+            //todo: refactor source/destination dir checking into separate method
+            if (!Directory.Exists(destinationBaseDirVideos))
+                Common.Common.Die($"Destination directory '{destinationBaseDirVideos}' does not exist!");
 
-            // search for images
+            // search for images and videos
 
-            Console.WriteLine($"Searching for images in {fullPathToPictures}");
-            var images = Images.Images.FindImages(fullPathToPictures);
+            Console.WriteLine($"Searching in {fullPathToMedia}");
+            var files = Images.Images.FindImages(fullPathToMedia);
 
-            var imagesFiltered = Images.Images.FilterImages(images, filterYear, filterMonth, filterDay);
+            var imagesFiltered = Images.Images.FilterImages(files, filterYear, filterMonth, filterDay);
             if (imagesFiltered.Count == 0)
             {
                 Console.WriteLine("No images found matching the filter criteria");
@@ -65,13 +72,13 @@ namespace SortPics
 
             // present to the user the picture list and ask for confirmation to move
             foreach (var image in imagesFiltered)
-                Images.Images.Move(image, destinationBaseDir);
+                Images.Images.Move(image, destinationBaseDirPhotos, destinationBaseDirVideos);
 
             var response = UserInput.ConfirmContinue("Do you want to continue and move these images?");
             if (response)
             {
                 foreach (var image in imagesFiltered)
-                    Images.Images.Move(image, destinationBaseDir, false);
+                    Images.Images.Move(image, destinationBaseDirPhotos, destinationBaseDirVideos, false);
             }
             else
             {

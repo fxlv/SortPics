@@ -19,6 +19,10 @@ namespace SortPics.Images
             CreationDate = File.GetCreationTime(FilePath);
             MimeType = Images.GetMimeType(FilePath);
             GetExifData();
+            if (Images.IsImage(FilePath))
+                IsImage = true;
+            if (Images.IsVideo(FilePath))
+                IsVideo = true;
         }
 
         public string FilePath { set; get; }
@@ -30,6 +34,9 @@ namespace SortPics.Images
         public string CameraMake { set; get; }
         public string GpsLatitude { set; get; }
         public string GpsLongitude { set; get; }
+        public bool IsVideo { set; get; }
+        public bool IsImage { set; get; }
+
 
         /// <summary>
         /// Get EXIF data from the image file

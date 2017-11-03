@@ -35,19 +35,34 @@ namespace SortPics.Images
             var mime = GetMimeType(fileName);
             if (supportedMimeTypes.Contains(mime))
                 return true;
-            Console.WriteLine($"Unknown file {fileName} with mime type: {mime}");
             return false;
         }
-
+        /// <summary>
+        /// Check if file is a movie file based on MIME type and the extension
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
         public static bool IsVideo(string fileName)
         {
+            /*
+             For videos, it seems that many MP4's have MIME type "application/octet-stream"
+             Which isn't really that helpful, so idea is to check the extension and then 
+             additionally check against supported MIME types list.
+             */
+            // todo: use meta data to validate whether this is a movie file or not
             var supportedMimeTypes = new List<string>();
             supportedMimeTypes.Add("video/quicktime");
+            supportedMimeTypes.Add("application/octet-stream");
 
-            var mime = MimeMapping.GetMimeMapping(fileName);
-            if (supportedMimeTypes.Contains(mime))
+            var supportedVideoExtensions = new List<string>();
+            supportedVideoExtensions.Add(".mp4");
+            supportedVideoExtensions.Add(".mov");
+
+            var mime = GetMimeType(fileName);
+            var extension = Path.GetExtension(fileName);
+            // if both MIME type and extension are recognized, it's a movie!
+            if (supportedMimeTypes.Contains(mime) && supportedVideoExtensions.Contains(extension))
                 return true;
-            Console.WriteLine($"Unknown file {fileName} with mime type: {mime}");
             return false;
         }
 
@@ -63,7 +78,7 @@ namespace SortPics.Images
             var files = Directory.GetFiles(searchPath);
 
             foreach (var fileName in files)
-                if (IsImage(fileName))
+                if (IsImage(fileName) || IsVideo(fileName))
                 {
                     var image = new MediaFile(fileName);
                     ImagesList.Add(image);
@@ -79,15 +94,32 @@ namespace SortPics.Images
         ///     Move one image to the right destination path.
         /// </summary>
         /// <param name="image"></param>
-        /// <param name="destinationBaseDir"></param>
+        /// <param name="destinationBaseDirPhotos"></param>
+        /// <param name="destinationBaseDirVideos"></param>
         /// <param name="dryRun"></param>
-        public static void Move(MediaFile image, string destinationBaseDir, bool dryRun = true)
+        public static void Move(MediaFile image, string destinationBaseDirPhotos, string destinationBaseDirVideos, bool dryRun = true)
         {
-            var imageYear = image.ModificationDate.Year.ToString();
-            var imageMonth = image.ModificationDate.Month.ToString().PadLeft(2, '0');
+            // todo: refactor so that there would be no need to pass two destination arguments for each: photos and videos
+            var mediaFileYear = image.ModificationDate.Year.ToString();
+            var mediaFileMonth = image.ModificationDate.Month.ToString().PadLeft(2, '0');
 
-            var imageDestinationDirectory = Path.Combine(destinationBaseDir, imageYear, imageMonth);
-            var imageDestinationPath = Path.Combine(imageDestinationDirectory, image.FileName);
+            string imageDestinationDirectory = "";
+            string imageDestinationPath = "";
+
+            if (image.IsVideo)
+            {
+                 imageDestinationDirectory = Path.Combine(destinationBaseDirVideos, mediaFileYear, mediaFileMonth);
+                 imageDestinationPath = Path.Combine(imageDestinationDirectory, image.FileName);
+            }
+            else if (image.IsImage)
+            {
+                 imageDestinationDirectory = Path.Combine(destinationBaseDirPhotos, mediaFileYear, mediaFileMonth);
+                 imageDestinationPath = Path.Combine(imageDestinationDirectory, image.FileName);
+            }
+            else
+            {
+                Common.Common.Die("Unrecognized file type. Cannot continue.");
+            }
 
             if (!dryRun)
                 if (!Directory.Exists(imageDestinationDirectory))
