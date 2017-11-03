@@ -10,6 +10,17 @@ namespace SortPics.Images
     internal class Images
     {
         /// <summary>
+        /// Return MIME type as string.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        public static string GetMimeType(string fileName)
+        {
+            var mimeType = MimeMapping.GetMimeMapping(fileName);
+            return mimeType;
+        }
+
+        /// <summary>
         ///     Check if the file is an image based on its MIME type
         /// </summary>
         /// <param name="fileName"></param>
@@ -21,7 +32,7 @@ namespace SortPics.Images
             supportedMimeTypes.Add("image/png");
             supportedMimeTypes.Add("image/gif");
 
-            var mime = MimeMapping.GetMimeMapping(fileName);
+            var mime = GetMimeType(fileName);
             if (supportedMimeTypes.Contains(mime))
                 return true;
             Console.WriteLine($"Unknown file {fileName} with mime type: {mime}");
