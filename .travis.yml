@@ -1,0 +1,6 @@
+language: csharp
+solution: "./SortPics.sln"
+install:
+  - travis_retry nuget restore -source "https://www.nuget.org/api/v2" ./Fibonacci/Fibonacci.sln
+script:
+  - xbuild ./SortPics.sln
