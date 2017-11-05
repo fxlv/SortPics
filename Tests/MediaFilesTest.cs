@@ -12,7 +12,17 @@ public class MediaFilesTest
     public void SetUpImages()
     {
         imagesDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "testfiles");
+        // in order for tests to work, we need to ensure that file modification dates are set accordingly
+        // as they will break if doing a clean checkout
+        var testFile1 = Path.Combine(imagesDirectory, "20170224_115931000_iOS.png");
+        var testFile2 = Path.Combine(imagesDirectory, "20170126_012712498_iOS.jpg");
+        var testFile3 = Path.Combine(imagesDirectory, "computer-2893112_640.png");
+        File.SetLastWriteTime(testFile1, new DateTime(2017, 1, 10));// January 10th 2017
+        File.SetLastWriteTime(testFile2, new DateTime(2017, 2, 11));// February 11th 2017
+        File.SetLastWriteTime(testFile3, new DateTime(2017, 2, 12));// February 12th 2017
+        // populate List<MediaFile> for later consumption by tests  
         images = Images.FindImages(imagesDirectory);
+
     }
 
     private string imagesDirectory;
