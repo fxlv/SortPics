@@ -1,4 +1,8 @@
+
 # SortPics
+
+[![Build Status](https://travis-ci.org/fxlv/SortPics.svg?branch=master)](https://travis-ci.org/fxlv/SortPics)
+
 
 Find all the Images and Videos in specified directory and move them to destination directory.
 Organize by Year and Month in the destionation directory.
