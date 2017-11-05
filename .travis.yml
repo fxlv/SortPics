@@ -4,3 +4,4 @@ install:
   - travis_retry nuget restore -source "https://www.nuget.org/api/v2" ./SortPics.sln
 script:
   - xbuild ./SortPics.sln
+  # https://docs.travis-ci.com/user/languages/csharp/
