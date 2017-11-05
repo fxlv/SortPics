@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using CommandLine;
-using SortPics.Common;
 using SortPics.Properties;
+using SortPicsLib.Images;
+using SortPicsLib.Common;
 
 namespace SortPics
 {
@@ -16,7 +17,7 @@ namespace SortPics
             var filterDay = 0;
 
             // Parse arguments using CommandLine module
-            var options = new Options();
+            var options = new SortPicsLib.Common.Options();
             var optionsParseSuccess = Parser.Default.ParseArguments(args, options);
             if (optionsParseSuccess)
             {
@@ -26,7 +27,7 @@ namespace SortPics
             }
             else
             {
-                Common.Common.Die("Invalid options specified, please see above for supported options.");
+                SortPicsLib.Common.Common.Die("Invalid options specified, please see above for supported options.");
             }
 
             var settings = new Settings();
@@ -49,20 +50,20 @@ namespace SortPics
 
             // check that both source and destination paths exist
             if (!Directory.Exists(fullPathToMedia))
-                Common.Common.Die($"Source directory '{fullPathToMedia}' does not exist!");
+                SortPicsLib.Common.Common.Die($"Source directory '{fullPathToMedia}' does not exist!");
 
             if (!Directory.Exists(destinationBaseDirPhotos))
-                Common.Common.Die($"Destination directory '{destinationBaseDirPhotos}' does not exist!");
+                SortPicsLib.Common.Common.Die($"Destination directory '{destinationBaseDirPhotos}' does not exist!");
             //todo: refactor source/destination dir checking into separate method
             if (!Directory.Exists(destinationBaseDirVideos))
-                Common.Common.Die($"Destination directory '{destinationBaseDirVideos}' does not exist!");
+                SortPicsLib.Common.Common.Die($"Destination directory '{destinationBaseDirVideos}' does not exist!");
 
             // search for images and videos
 
             Console.WriteLine($"Searching in {fullPathToMedia}");
-            var files = Images.Images.FindImages(fullPathToMedia);
+            var files = SortPicsLib.Images.Images.FindImages(fullPathToMedia);
 
-            var imagesFiltered = Images.Images.FilterImages(files, filterYear, filterMonth, filterDay);
+            var imagesFiltered = SortPicsLib.Images.Images.FilterImages(files, filterYear, filterMonth, filterDay);
             if (imagesFiltered.Count == 0)
             {
                 Console.WriteLine("No images found matching the filter criteria");
@@ -72,13 +73,13 @@ namespace SortPics
 
             // present to the user the picture list and ask for confirmation to move
             foreach (var image in imagesFiltered)
-                Images.Images.Move(image, destinationBaseDirPhotos, destinationBaseDirVideos);
+                SortPicsLib.Images.Images.Move(image, destinationBaseDirPhotos, destinationBaseDirVideos);
 
             var response = UserInput.ConfirmContinue("Do you want to continue and move these images?");
             if (response)
             {
                 foreach (var image in imagesFiltered)
-                    Images.Images.Move(image, destinationBaseDirPhotos, destinationBaseDirVideos, false);
+                    SortPicsLib.Images.Images.Move(image, destinationBaseDirPhotos, destinationBaseDirVideos, false);
             }
             else
             {

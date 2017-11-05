@@ -1,17 +1,17 @@
-﻿using static System.Console;
+﻿using System;
 
-namespace SortPics.Common
+namespace SortPicsLib.Common
 {
-    internal class UserInput
+    public class UserInput
     {
         public static bool ConfirmContinue(string msg = null)
         {
             while (true)
             {
                 if (msg != null)
-                    WriteLine(msg);
-                Write("Please answer with y/n: ");
-                var userResponse = ReadLine();
+                    Console.WriteLine(msg);
+                Console.Write("Please answer with y/n: ");
+                var userResponse = Console.ReadLine();
                 switch (userResponse)
                 {
                     case "y":

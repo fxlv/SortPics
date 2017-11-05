@@ -2,9 +2,9 @@
 using CommandLine;
 using CommandLine.Text;
 
-namespace SortPics.Common
+namespace SortPicsLib.Common
 {
-    internal class Options
+    public class Options
     {
         [Option('y', "year", Required = false, DefaultValue = null, HelpText = "Filter year")]
         //todo: only accept valid years 

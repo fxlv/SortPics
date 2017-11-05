@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SortPics", "SortPics\SortPi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{C0DACCE4-768A-4A1A-99F3-0C6C42A469FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SortPicsLib", "SortPicsLib\SortPicsLib.csproj", "{B089E022-9E55-4BFE-A470-6D3210DC7EC9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C0DACCE4-768A-4A1A-99F3-0C6C42A469FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0DACCE4-768A-4A1A-99F3-0C6C42A469FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0DACCE4-768A-4A1A-99F3-0C6C42A469FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B089E022-9E55-4BFE-A470-6D3210DC7EC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B089E022-9E55-4BFE-A470-6D3210DC7EC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B089E022-9E55-4BFE-A470-6D3210DC7EC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B089E022-9E55-4BFE-A470-6D3210DC7EC9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

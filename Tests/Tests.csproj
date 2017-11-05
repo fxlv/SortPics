@@ -51,6 +51,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SortPicsLib\SortPicsLib.csproj">
+      <Project>{b089e022-9e55-4bfe-a470-6d3210dc7ec9}</Project>
+      <Name>SortPicsLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SortPics\SortPics.csproj">
       <Project>{03c29360-222f-4ecc-a54b-da5501cb43d1}</Project>
       <Name>SortPics</Name>

@@ -91,12 +91,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\Common.cs" />
-    <Compile Include="Common\FileHash.cs" />
-    <Compile Include="Common\UserInput.cs" />
-    <Compile Include="Images\MediaFile.cs" />
-    <Compile Include="Images\Images.cs" />
-    <Compile Include="Common\Options.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -126,6 +120,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SortPicsLib\SortPicsLib.csproj">
+      <Project>{b089e022-9e55-4bfe-a470-6d3210dc7ec9}</Project>
+      <Name>SortPicsLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

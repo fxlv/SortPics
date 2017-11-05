@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
-using SortPics.Images;
-
+using SortPicsLib.Common;
+using SortPicsLib.Images;
 [TestFixture]
 public class MediaFilesTest
 {

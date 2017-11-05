@@ -4,7 +4,7 @@ using System.Linq;
 using MetadataExtractor;
 using MetadataExtractor.Formats.Exif;
 
-namespace SortPics.Images
+namespace SortPicsLib.Images
 {
     /// <summary>
     ///     Media file

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace SortPics.Common
+namespace SortPicsLib.Common
 {
-    internal class Common
+    public class Common
     {
         /// <summary>
         ///     Exit and optionally print an error message.

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Web;
-using SortPics.Common;
+using System.Linq;
 
-namespace SortPics.Images
+namespace SortPicsLib.Images
 {
     public class Images
     {
@@ -16,6 +15,7 @@ namespace SortPics.Images
         /// <returns></returns>
         public static string GetMimeType(string fileName)
         {
+            
             var mimeType = MimeMapping.GetMimeMapping(fileName);
             return mimeType;
         }
@@ -125,7 +125,7 @@ namespace SortPics.Images
                 if (!Directory.Exists(imageDestinationDirectory))
                 {
                     Console.WriteLine($"Destination directory {imageDestinationDirectory} doest not exist!");
-                    var response = UserInput.ConfirmContinue("Do you want to create the destination directory?");
+                    var response = SortPicsLib.Common.UserInput.ConfirmContinue("Do you want to create the destination directory?");
                     if (response)
                     {
                         Console.WriteLine($"Creating {imageDestinationDirectory}");
@@ -143,8 +143,8 @@ namespace SortPics.Images
             if (File.Exists(imageDestinationPath))
             {
                 Console.WriteLine("Interesting, destination file already exists. Will check the hash.");
-                var destinationHash = FileHash.GetMd5Hash(imageDestinationPath);
-                var sourceHash = FileHash.GetMd5Hash(image.FilePath);
+                var destinationHash = SortPicsLib.Common.FileHash.GetMd5Hash(imageDestinationPath);
+                var sourceHash = SortPicsLib.Common.FileHash.GetMd5Hash(image.FilePath);
                 if (destinationHash == sourceHash)
                     Console.WriteLine("Source and destination files are the same!");
                 else

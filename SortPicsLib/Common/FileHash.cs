@@ -2,9 +2,9 @@
 using System.IO;
 using System.Security.Cryptography;
 
-namespace SortPics.Common
+namespace SortPicsLib.Common
 {
-    internal class FileHash
+    public class FileHash
     {
         public static string GetMd5Hash(string fileName)
         {
