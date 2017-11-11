@@ -145,9 +145,8 @@ namespace SortPicsLib.Images
             if (File.Exists(imageDestinationPath))
             {
                 Console.WriteLine("Interesting, destination file already exists. Will check the hash.");
-                var destinationHash = FileHash.GetMd5Hash(imageDestinationPath);
-                var sourceHash = FileHash.GetMd5Hash(image.FilePath);
-                if (destinationHash == sourceHash)
+
+                if(FileHash.FilesAreTheSame(imageDestinationPath, image.FilePath))
                     Console.WriteLine("Source and destination files are the same!");
                 else
                     Console.WriteLine("Source and destination files names are the same, but contents are different!");
