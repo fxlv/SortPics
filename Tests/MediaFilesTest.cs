@@ -110,4 +110,21 @@ public class MediaFilesTest
         Assert.AreEqual("28-F5-99-56-F0-F6-FA-98-E2-53-A7-56-55-AC-A1-54", md5Hash);
     }
 
+
+    [Test]
+    public void TestFilesAreTheSame()
+    {
+        var fileName1 = Path.Combine(imagesDirectory, "20170224_115931000_iOS.png");
+        Assert.IsTrue(SortPicsLib.Common.FileHash.FilesAreTheSame(fileName1, fileName1));
+    }
+
+
+    [Test]
+    public void TestFilesAreNotTheSame()
+    {
+        var fileName1 = Path.Combine(imagesDirectory, "20170224_115931000_iOS.png");
+        var fileName2 = Path.Combine(imagesDirectory, "computer-2893112_640.png");
+        Assert.IsFalse(SortPicsLib.Common.FileHash.FilesAreTheSame(fileName1, fileName2));
+
+    }
 }
