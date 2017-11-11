@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Web;
 using System.Linq;
+using System.Web;
+using SortPicsLib.Common;
 
 namespace SortPicsLib.Images
 {
     public class Images
     {
         /// <summary>
-        /// Return MIME type as string.
+        ///     Return MIME type as string.
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
         public static string GetMimeType(string fileName)
         {
-            
             var mimeType = MimeMapping.GetMimeMapping(fileName);
             return mimeType;
         }
@@ -37,8 +37,9 @@ namespace SortPicsLib.Images
                 return true;
             return false;
         }
+
         /// <summary>
-        /// Check if file is a movie file based on MIME type and the extension
+        ///     Check if file is a movie file based on MIME type and the extension
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
@@ -97,24 +98,25 @@ namespace SortPicsLib.Images
         /// <param name="destinationBaseDirPhotos"></param>
         /// <param name="destinationBaseDirVideos"></param>
         /// <param name="dryRun"></param>
-        public static void Move(MediaFile image, string destinationBaseDirPhotos, string destinationBaseDirVideos, bool dryRun = true)
+        public static void Move(MediaFile image, string destinationBaseDirPhotos, string destinationBaseDirVideos,
+            bool dryRun = true)
         {
             // todo: refactor so that there would be no need to pass two destination arguments for each: photos and videos
             var mediaFileYear = image.ModificationDate.Year.ToString();
             var mediaFileMonth = image.ModificationDate.Month.ToString().PadLeft(2, '0');
 
-            string imageDestinationDirectory = "";
-            string imageDestinationPath = "";
+            var imageDestinationDirectory = "";
+            var imageDestinationPath = "";
 
             if (image.IsVideo)
             {
-                 imageDestinationDirectory = Path.Combine(destinationBaseDirVideos, mediaFileYear, mediaFileMonth);
-                 imageDestinationPath = Path.Combine(imageDestinationDirectory, image.FileName);
+                imageDestinationDirectory = Path.Combine(destinationBaseDirVideos, mediaFileYear, mediaFileMonth);
+                imageDestinationPath = Path.Combine(imageDestinationDirectory, image.FileName);
             }
             else if (image.IsImage)
             {
-                 imageDestinationDirectory = Path.Combine(destinationBaseDirPhotos, mediaFileYear, mediaFileMonth);
-                 imageDestinationPath = Path.Combine(imageDestinationDirectory, image.FileName);
+                imageDestinationDirectory = Path.Combine(destinationBaseDirPhotos, mediaFileYear, mediaFileMonth);
+                imageDestinationPath = Path.Combine(imageDestinationDirectory, image.FileName);
             }
             else
             {
@@ -125,7 +127,7 @@ namespace SortPicsLib.Images
                 if (!Directory.Exists(imageDestinationDirectory))
                 {
                     Console.WriteLine($"Destination directory {imageDestinationDirectory} doest not exist!");
-                    var response = SortPicsLib.Common.UserInput.ConfirmContinue("Do you want to create the destination directory?");
+                    var response = UserInput.ConfirmContinue("Do you want to create the destination directory?");
                     if (response)
                     {
                         Console.WriteLine($"Creating {imageDestinationDirectory}");
@@ -143,8 +145,8 @@ namespace SortPicsLib.Images
             if (File.Exists(imageDestinationPath))
             {
                 Console.WriteLine("Interesting, destination file already exists. Will check the hash.");
-                var destinationHash = SortPicsLib.Common.FileHash.GetMd5Hash(imageDestinationPath);
-                var sourceHash = SortPicsLib.Common.FileHash.GetMd5Hash(image.FilePath);
+                var destinationHash = FileHash.GetMd5Hash(imageDestinationPath);
+                var sourceHash = FileHash.GetMd5Hash(image.FilePath);
                 if (destinationHash == sourceHash)
                     Console.WriteLine("Source and destination files are the same!");
                 else
@@ -170,7 +172,8 @@ namespace SortPicsLib.Images
         /// <param name="filterMonth"></param>
         /// <param name="filterDay"></param>
         /// <returns>List of filtered images</returns>
-        public static List<MediaFile> FilterImages(List<MediaFile> images, int filterYear, int filterMonth, int filterDay)
+        public static List<MediaFile> FilterImages(List<MediaFile> images, int filterYear, int filterMonth,
+            int filterDay)
         {
             // return all images by default
             var imagesFiltered = images;

@@ -29,8 +29,8 @@ namespace SortPicsLib.Images
         public DateTime ModificationDate { set; get; }
         public DateTime CreationDate { set; get; }
         public string FileName { set; get; }
-        public string MimeType { set; get;  }
-        public string CameraModel { set; get;  }
+        public string MimeType { set; get; }
+        public string CameraModel { set; get; }
         public string CameraMake { set; get; }
         public string GpsLatitude { set; get; }
         public string GpsLongitude { set; get; }
@@ -39,23 +39,25 @@ namespace SortPicsLib.Images
 
 
         /// <summary>
-        /// Get EXIF data from the image file
+        ///     Get EXIF data from the image file
         /// </summary>
         public void GetExifData()
         {
             var metaData = ImageMetadataReader.ReadMetadata(FilePath);
             var exifDirectory = metaData.OfType<ExifIfd0Directory>().FirstOrDefault();
-            if(exifDirectory != null )
+            if (exifDirectory != null)
             {
-                CameraModel =  exifDirectory.GetDescription(ExifDirectoryBase.TagModel);
+                CameraModel = exifDirectory.GetDescription(ExifDirectoryBase.TagModel);
                 CameraMake = exifDirectory.GetDescription(ExifDirectoryBase.TagMake);
             }
             // todo: refactor GPS stuff to separate method
             var gpsDirectory = metaData.OfType<GpsDirectory>().FirstOrDefault();
             if (gpsDirectory != null)
             {
-                GpsLatitude = gpsDirectory.Tags.ToArray().Where(s => s.Name == "GPS Latitude").FirstOrDefault().Description;
-                GpsLongitude = gpsDirectory.Tags.ToArray().Where(s => s.Name == "GPS Longitude").FirstOrDefault().Description;
+                GpsLatitude = gpsDirectory.Tags.ToArray().Where(s => s.Name == "GPS Latitude").FirstOrDefault()
+                    .Description;
+                GpsLongitude = gpsDirectory.Tags.ToArray().Where(s => s.Name == "GPS Longitude").FirstOrDefault()
+                    .Description;
             }
         }
 
