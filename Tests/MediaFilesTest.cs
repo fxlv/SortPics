@@ -102,4 +102,12 @@ public class MediaFilesTest
         Assert.IsTrue(testImagePng.IsImage);
         Assert.AreEqual(testImagePng.MimeType, "image/png");
     }
+
+    [Test]
+    public void TestMd5Hash()
+    {
+        var md5Hash = SortPicsLib.Common.FileHash.GetMd5Hash(Path.Combine(imagesDirectory, "20170224_115931000_iOS.png"));
+        Assert.AreEqual("28-F5-99-56-F0-F6-FA-98-E2-53-A7-56-55-AC-A1-54", md5Hash);
+    }
+
 }
