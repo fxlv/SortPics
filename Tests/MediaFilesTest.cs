@@ -113,7 +113,7 @@ namespace Tests
         [Test]
         public void TestMd5Hash()
         {
-            var md5Hash = SortPicsLib.Common.FileHash.GetMd5Hash(Path.Combine(imagesDirectory, "20170224_115931000_iOS.png"));
+            var md5Hash = SortPicsLib.Common.FileHash.GetMd5Hash(TestFile1);
             Assert.AreEqual("28-F5-99-56-F0-F6-FA-98-E2-53-A7-56-55-AC-A1-54", md5Hash);
         }
 
@@ -121,17 +121,15 @@ namespace Tests
         [Test]
         public void TestFilesAreTheSame()
         {
-            var fileName1 = Path.Combine(imagesDirectory, "20170224_115931000_iOS.png");
-            Assert.IsTrue(SortPicsLib.Common.FileHash.FilesAreTheSame(fileName1, fileName1));
+            Assert.IsTrue(SortPicsLib.Common.FileHash.FilesAreTheSame(TestFile1, TestFile1));
         }
 
 
         [Test]
         public void TestFilesAreNotTheSame()
         {
-            var fileName1 = Path.Combine(imagesDirectory, "20170224_115931000_iOS.png");
-            var fileName2 = Path.Combine(imagesDirectory, "computer-2893112_640.png");
-            Assert.IsFalse(SortPicsLib.Common.FileHash.FilesAreTheSame(fileName1, fileName2));
+           
+            Assert.IsFalse(SortPicsLib.Common.FileHash.FilesAreTheSame(TestFile1, TestFile2));
 
         }
     }
