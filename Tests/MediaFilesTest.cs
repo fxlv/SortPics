@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using SortPicsLib.Common;
 using SortPicsLib.Images;
 
 namespace Tests
@@ -12,6 +13,7 @@ namespace Tests
     {
         // set up fields
         public string TestFile1;
+
         public string TestFile2;
         public string TestFile3;
 
@@ -43,7 +45,6 @@ namespace Tests
             // create new directories for testing media file moving
             Directory.CreateDirectory(destinationBaseDirPhotos);
             Directory.CreateDirectory(destinationBaseDirVideos);
-
         }
 
         [OneTimeTearDown]
@@ -53,8 +54,6 @@ namespace Tests
             Directory.Delete(destinationBaseDirVideos, true);
             Directory.Delete(imagesDirectory, true);
         }
-
-
 
         [Test]
         public void ImagesCountIsCorrect()
@@ -70,6 +69,18 @@ namespace Tests
             Assert.AreEqual(testImagePng.MimeType, "image/jpeg");
             Assert.AreEqual(testImagePng.CameraMake, "Apple");
             Assert.AreEqual(testImagePng.CameraModel, "iPhone 6s");
+        }
+
+        [Test]
+        public void TestFilesAreNotTheSame()
+        {
+            Assert.IsFalse(FileHash.FilesAreTheSame(TestFile1, TestFile2));
+        }
+
+        [Test]
+        public void TestFilesAreTheSame()
+        {
+            Assert.IsTrue(FileHash.FilesAreTheSame(TestFile1, TestFile1));
         }
 
         [Test]
@@ -117,41 +128,63 @@ namespace Tests
         }
 
         [Test]
+        public void TestMd5Hash()
+        {
+            var md5Hash = FileHash.GetMd5Hash(TestFile1);
+            Assert.AreEqual("28-F5-99-56-F0-F6-FA-98-E2-53-A7-56-55-AC-A1-54", md5Hash);
+        }
+
+        [Test]
         public void TestMediaFileStringRepresentation()
         {
             var testImagePng = images.Where(s => s.FileName == "computer-2893112_640.png").FirstOrDefault();
             Assert.AreEqual(testImagePng.ToString(), "Media file: computer-2893112_640.png");
         }
 
+       
+        [Test]
+        public void TestMoveImageDryRun()
+        {
+            var testImagePng = images.Where(s => s.FileName == "computer-2893112_640.png").FirstOrDefault();
+            var destinationBaseDirPhotosWithYear = Path.Combine(destinationBaseDirPhotos, "2017");
+            var destinationBaseDirPhotosWithYearAndMonth = Path.Combine(destinationBaseDirPhotosWithYear, "02");
+
+            var destinationFileAfterMove =
+                Path.Combine(destinationBaseDirPhotosWithYearAndMonth, testImagePng.FileName);
+            Directory.CreateDirectory(
+                destinationBaseDirPhotosWithYearAndMonth); // todo: remove this once Move() logic is improved
+            // check that file does not exist before the move
+            Assert.IsFalse(File.Exists(destinationFileAfterMove));
+            // move the file
+            Images.Move(testImagePng, destinationBaseDirPhotos, destinationBaseDirVideos);
+            // verify that in fact nothing changed, as this was a dry run
+            Assert.IsFalse(File.Exists(destinationFileAfterMove));
+        }
+        [Test]
+        public void TestMoveImage()
+        {
+            var testImagePng = images.Where(s => s.FileName == "computer-2893112_640.png").FirstOrDefault();
+            var destinationBaseDirPhotosWithYear = Path.Combine(destinationBaseDirPhotos, "2017");
+            var destinationBaseDirPhotosWithYearAndMonth = Path.Combine(destinationBaseDirPhotosWithYear, "02");
+
+            var destinationFileAfterMove =
+                Path.Combine(destinationBaseDirPhotosWithYearAndMonth, testImagePng.FileName);
+            Directory.CreateDirectory(
+                destinationBaseDirPhotosWithYearAndMonth); // todo: remove this once Move() logic is improved
+            // check that file does not exist before the move
+            Assert.IsFalse(File.Exists(destinationFileAfterMove));
+            // move the file
+            Images.Move(testImagePng, destinationBaseDirPhotos, destinationBaseDirVideos, false);
+            // verify that it exists in destination dir now
+            Assert.IsTrue(File.Exists(destinationFileAfterMove));
+            Directory.Delete(destinationBaseDirPhotosWithYear, true); // cleanup
+        }
         [Test]
         public void TestPngFile()
         {
             var testImagePng = images.Where(s => s.FileName == "computer-2893112_640.png").FirstOrDefault();
             Assert.IsTrue(testImagePng.IsImage);
             Assert.AreEqual(testImagePng.MimeType, "image/png");
-        }
-
-        [Test]
-        public void TestMd5Hash()
-        {
-            var md5Hash = SortPicsLib.Common.FileHash.GetMd5Hash(TestFile1);
-            Assert.AreEqual("28-F5-99-56-F0-F6-FA-98-E2-53-A7-56-55-AC-A1-54", md5Hash);
-        }
-
-
-        [Test]
-        public void TestFilesAreTheSame()
-        {
-            Assert.IsTrue(SortPicsLib.Common.FileHash.FilesAreTheSame(TestFile1, TestFile1));
-        }
-
-
-        [Test]
-        public void TestFilesAreNotTheSame()
-        {
-           
-            Assert.IsFalse(SortPicsLib.Common.FileHash.FilesAreTheSame(TestFile1, TestFile2));
-
         }
     }
 }

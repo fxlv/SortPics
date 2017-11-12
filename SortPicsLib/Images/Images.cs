@@ -122,7 +122,8 @@ namespace SortPicsLib.Images
             {
                 Common.Common.Die("Unrecognized file type. Cannot continue.");
             }
-
+            // todo: decouple directory checks from Move()
+            // todo: don't interact with user from within a library
             if (!dryRun)
                 if (!Directory.Exists(imageDestinationDirectory))
                 {
