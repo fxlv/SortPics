@@ -15,10 +15,20 @@ namespace Tests
         public string TestFile2;
         public string TestFile3;
 
-        [SetUp]
+        private string imagesDirectory;
+        private string destinationBaseDirPhotos;
+        private string destinationBaseDirVideos;
+
+
+        private List<MediaFile> images;
+
+        [OneTimeSetUp]
         public void SetUpImages()
         {
             imagesDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "testfiles");
+            destinationBaseDirVideos = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "destinationVideos");
+            destinationBaseDirPhotos = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "destinationPhotos");
+
             // in order for tests to work, we need to ensure that file modification dates are set accordingly
             // as they will break if doing a clean checkout
             TestFile1 = Path.Combine(imagesDirectory, "20170224_115931000_iOS.png");
@@ -29,10 +39,21 @@ namespace Tests
             File.SetLastWriteTime(TestFile3, new DateTime(2017, 2, 12)); // February 12th 2017
             // populate List<MediaFile> for later consumption by tests  
             images = Images.FindImages(imagesDirectory);
+
+            // create new directories for testing media file moving
+            Directory.CreateDirectory(destinationBaseDirPhotos);
+            Directory.CreateDirectory(destinationBaseDirVideos);
+
         }
 
-        private string imagesDirectory;
-        private List<MediaFile> images;
+        [OneTimeTearDown]
+        public void TearDownImages()
+        {
+            Directory.Delete(destinationBaseDirPhotos, true);
+            Directory.Delete(destinationBaseDirVideos, true);
+            Directory.Delete(imagesDirectory, true);
+        }
+
 
 
         [Test]
