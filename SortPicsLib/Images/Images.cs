@@ -92,6 +92,29 @@ namespace SortPicsLib.Images
         }
 
         /// <summary>
+        /// Create specified directory if it does not exist yet,
+        /// ask user for confirmation.
+        /// </summary>
+        /// <param name="path"></param>
+        public static void CreateDirectoryIfNotExists(string path)
+        {
+            if (!Directory.Exists(path))
+            {
+                Console.WriteLine($"Destination directory {path} doest not exist!");
+                var response = UserInput.ConfirmContinue("Do you want to create the destination directory?");
+                //todo: don't interact with user from library
+                if (response)
+                {
+                    Console.WriteLine($"Creating {path}");
+                    Directory.CreateDirectory(path);
+                }
+                else
+                {
+                    Common.Common.Die($"Destination directory '{path}' does not exist!");
+                }
+            }
+        }
+        /// <summary>
         ///     Move one image to the right destination path.
         /// </summary>
         /// <param name="image"></param>
@@ -125,20 +148,7 @@ namespace SortPicsLib.Images
             // todo: decouple directory checks from Move()
             // todo: don't interact with user from within a library
             if (!dryRun)
-                if (!Directory.Exists(imageDestinationDirectory))
-                {
-                    Console.WriteLine($"Destination directory {imageDestinationDirectory} doest not exist!");
-                    var response = UserInput.ConfirmContinue("Do you want to create the destination directory?");
-                    if (response)
-                    {
-                        Console.WriteLine($"Creating {imageDestinationDirectory}");
-                        Directory.CreateDirectory(imageDestinationDirectory);
-                    }
-                    else
-                    {
-                        Common.Common.Die($"Destination directory '{imageDestinationDirectory}' does not exist!");
-                    }
-                }
+               CreateDirectoryIfNotExists(imageDestinationDirectory);
 
             // source and destination file paths prepared
             // make sure that destination file does not yet exist
