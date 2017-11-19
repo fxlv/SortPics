@@ -143,6 +143,7 @@ namespace SortPicsLib.Images
             }
             else
             {
+                // todo: replace with exception
                 Common.Common.Die("Unrecognized file type. Cannot continue.");
             }
             // todo: decouple directory checks from Move()

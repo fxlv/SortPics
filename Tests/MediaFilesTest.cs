@@ -16,6 +16,7 @@ namespace Tests
 
         public string TestFile2;
         public string TestFile3;
+        public string TestFileNotMediaFile;
 
         private string imagesDirectory;
         private string destinationBaseDirPhotos;
@@ -36,6 +37,7 @@ namespace Tests
             TestFile1 = Path.Combine(imagesDirectory, "20170224_115931000_iOS.png");
             TestFile2 = Path.Combine(imagesDirectory, "20170126_012712498_iOS.jpg");
             TestFile3 = Path.Combine(imagesDirectory, "computer-2893112_640.png");
+            TestFileNotMediaFile = Path.Combine(imagesDirectory, "not_a_media_file.txt");
             File.SetLastWriteTime(TestFile1, new DateTime(2017, 1, 10)); // January 10th 2017
             File.SetLastWriteTime(TestFile2, new DateTime(2017, 2, 11)); // February 11th 2017
             File.SetLastWriteTime(TestFile3, new DateTime(2017, 2, 12)); // February 12th 2017
@@ -54,7 +56,29 @@ namespace Tests
             Directory.Delete(destinationBaseDirVideos, true);
             Directory.Delete(imagesDirectory, true);
         }
+        /// <summary>
+        /// Test instantiating MediaFile with a valid image file.
+        /// </summary>
+        [Test]
+        public void TestMediaFileInstance()
+        {
+            var mediaFile = new MediaFile(TestFile1);
+            Assert.IsTrue(mediaFile.IsImage);
+            Assert.IsFalse(mediaFile.IsVideo);
 
+        }
+
+        /// <summary>
+        /// Test instantiating MediaFile with a non-media file.
+        /// In this case test it with a text file.
+        /// </summary>
+        [Test]
+        public void TestMediaFileInstanceNotMediaFile()
+        {
+            var notMediaFile = new MediaFile(TestFileNotMediaFile);
+            Assert.IsTrue(notMediaFile.IsImage);
+
+        }
         [Test]
         public void ImagesCountIsCorrect()
         {
