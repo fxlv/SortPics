@@ -21,7 +21,7 @@ namespace Tests
         private string imagesDirectory;
         private string destinationBaseDirPhotos;
         private string destinationBaseDirVideos;
-
+        private RuntimeSettings runtimeSettings;
 
         private List<MediaFile> images;
 
@@ -47,6 +47,11 @@ namespace Tests
             // create new directories for testing media file moving
             Directory.CreateDirectory(destinationBaseDirPhotos);
             Directory.CreateDirectory(destinationBaseDirVideos);
+
+            runtimeSettings = new RuntimeSettings(imagesDirectory, destinationBaseDirPhotos,
+                destinationBaseDirVideos);
+            runtimeSettings.FilterYear = 2017;
+            runtimeSettings.FilterMonth = 2;
         }
 
         [OneTimeTearDown]
@@ -135,6 +140,15 @@ namespace Tests
             Assert.AreEqual(0, imagesFiltered.Count);
         }
 
+        [Test]
+        public void TestFindImagesFiltered()
+        {
+           
+           
+            var images = Images.FindImagesFiltered(runtimeSettings);
+            Assert.AreEqual(2,images.Count);
+            Assert.IsTrue(images[0].FileName == "20170126_012712498_iOS.jpg");
+        }
         [Test]
         public void TestGeoTagging()
         {
