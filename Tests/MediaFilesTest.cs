@@ -75,8 +75,8 @@ namespace Tests
         [Test]
         public void TestMediaFileInstanceNotMediaFile()
         {
-            var notMediaFile = new MediaFile(TestFileNotMediaFile);
-            Assert.IsTrue(notMediaFile.IsImage);
+            var exception = Assert.Throws<System.FormatException>(() => new MediaFile(TestFileNotMediaFile));
+            Assert.That(exception.Message, Is.EqualTo("Unsupported file type."));
 
         }
         [Test]

@@ -18,11 +18,20 @@ namespace SortPicsLib.Images
             ModificationDate = File.GetLastWriteTime(FilePath);
             CreationDate = File.GetCreationTime(FilePath);
             MimeType = Images.GetMimeType(FilePath);
-            GetExifData();
             if (Images.IsImage(FilePath))
+            {
                 IsImage = true;
-            if (Images.IsVideo(FilePath))
+            }
+            else if (Images.IsVideo(FilePath))
+            {
                 IsVideo = true;
+            }
+            else
+            {
+                throw new FormatException("Unsupported file type.");
+            }
+            GetExifData();
+
         }
 
         public string FilePath { set; get; }
