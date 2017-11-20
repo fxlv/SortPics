@@ -17,6 +17,11 @@ namespace SortPicsLib.Common
         public string FullPathToMedia;
         public string DestinationBaseDirPhotos;
         public string DestinationBaseDirVideos;
+
+        public int FilterYear;
+        public int FilterMonth;
+        public int FilterDay;
+
         /// <summary>
         /// Take in source and destination paths for media as well as CLI options
         /// and marshal them into usable run time settings.
@@ -40,7 +45,9 @@ namespace SortPicsLib.Common
         public void Activate(Options options)
         {
             SubstituteUserOptions(options);
+            SubstituteFilters(options);
             CheckThatPathsExist();
+
         }
         /// <summary>
         /// check that both source and destination paths exist
@@ -57,6 +64,13 @@ namespace SortPicsLib.Common
                 if (!Directory.Exists(path))
                     throw new DirectoryNotFoundException($"Directory {path} not found."); 
             }
+        }
+
+        private void SubstituteFilters(Options options)
+        {
+            FilterYear = options.FilterYear;
+            FilterMonth = options.FilterMonth;
+            FilterDay = options.FilterDay;
         }
 
         private void SubstituteUserOptions(Options options)

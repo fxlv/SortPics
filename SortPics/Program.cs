@@ -11,24 +11,11 @@ namespace SortPics
     {
         private static void Main(string[] args)
         {
-            // set up default filter settings
-            var filterYear = 0;
-            var filterMonth = 0;
-            var filterDay = 0;
-
             // Parse arguments using CommandLine module
             var options = new Options();
             var optionsParseSuccess = Parser.Default.ParseArguments(args, options);
-            if (optionsParseSuccess)
-            {
-                filterYear = options.FilterYear;
-                filterMonth = options.FilterMonth;
-                filterDay = options.FilterDay;
-            }
-            else
-            {
+            if (!optionsParseSuccess)
                 Common.Die("Invalid options specified, please see above for supported options.");
-            }
 
             // call Runtime Settings here
             var settings = new Settings();
@@ -45,11 +32,10 @@ namespace SortPics
             }
 
             // search for images and videos
-
             Console.WriteLine($"Searching in {runtimeSettings.FullPathToMedia}");
             var files = Images.FindImages(runtimeSettings.FullPathToMedia);
 
-            var imagesFiltered = Images.FilterImages(files, filterYear, filterMonth, filterDay);
+            var imagesFiltered = Images.FilterImages(files, runtimeSettings.FilterYear, runtimeSettings.FilterMonth, runtimeSettings.FilterDay);
             if (imagesFiltered.Count == 0)
             {
                 Console.WriteLine("No images found matching the filter criteria");
