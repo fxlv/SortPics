@@ -25,6 +25,7 @@ namespace SortPicsLib.Images
             else if (Images.IsVideo(FilePath))
             {
                 IsVideo = true;
+                // todo: add unit test for Video files
             }
             else
             {

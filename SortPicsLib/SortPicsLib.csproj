@@ -53,6 +53,7 @@
     <Compile Include="Common\Common.cs" />
     <Compile Include="Common\FileHash.cs" />
     <Compile Include="Common\Options.cs" />
+    <Compile Include="Common\RuntimeSettings.cs" />
     <Compile Include="Common\UserInput.cs" />
     <Compile Include="Images\Images.cs" />
     <Compile Include="Images\MediaFile.cs" />

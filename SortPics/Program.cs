@@ -30,38 +30,24 @@ namespace SortPics
                 Common.Die("Invalid options specified, please see above for supported options.");
             }
 
+            // call Runtime Settings here
             var settings = new Settings();
-            var profilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            // if picturesPath is specified as an argument, use that, if not, use the one from settings
-            var fullPathToMedia = Path.Combine(profilePath, settings.sourcePath);
-            var destinationBaseDirPhotos = Path.Combine(profilePath, settings.photosDestinationPath);
-            var destinationBaseDirVideos = Path.Combine(profilePath, settings.videosDestinationPath);
 
-            // user can override source and destination directories via Options
-            if (options.ImagesSourcePath != null)
-                fullPathToMedia = options.ImagesSourcePath;
-
-            if (options.ImagesDestinationPath != null)
+            var runtimeSettings = new RuntimeSettings(settings.sourcePath, settings.photosDestinationPath,
+                settings.videosDestinationPath);
+            try
             {
-                destinationBaseDirPhotos = options.ImagesDestinationPath;
-                destinationBaseDirVideos = options.ImagesDestinationPath;
+                runtimeSettings.Activate(options);
             }
-
-
-            // check that both source and destination paths exist
-            if (!Directory.Exists(fullPathToMedia))
-                Common.Die($"Source directory '{fullPathToMedia}' does not exist!");
-
-            if (!Directory.Exists(destinationBaseDirPhotos))
-                Common.Die($"Destination directory '{destinationBaseDirPhotos}' does not exist!");
-            //todo: refactor source/destination dir checking into separate method
-            if (!Directory.Exists(destinationBaseDirVideos))
-                Common.Die($"Destination directory '{destinationBaseDirVideos}' does not exist!");
+            catch (DirectoryNotFoundException e)
+            {
+                Common.Die(e.Message);
+            }
 
             // search for images and videos
 
-            Console.WriteLine($"Searching in {fullPathToMedia}");
-            var files = Images.FindImages(fullPathToMedia);
+            Console.WriteLine($"Searching in {runtimeSettings.FullPathToMedia}");
+            var files = Images.FindImages(runtimeSettings.FullPathToMedia);
 
             var imagesFiltered = Images.FilterImages(files, filterYear, filterMonth, filterDay);
             if (imagesFiltered.Count == 0)
@@ -73,13 +59,13 @@ namespace SortPics
 
             // present to the user the picture list and ask for confirmation to move
             foreach (var image in imagesFiltered)
-                Images.Move(image, destinationBaseDirPhotos, destinationBaseDirVideos);
+                Images.Move(image, runtimeSettings.DestinationBaseDirPhotos, runtimeSettings.DestinationBaseDirVideos);
 
             var response = UserInput.ConfirmContinue("Do you want to continue and move these images?");
             if (response)
             {
                 foreach (var image in imagesFiltered)
-                    Images.Move(image, destinationBaseDirPhotos, destinationBaseDirVideos, false);
+                    Images.Move(image, runtimeSettings.DestinationBaseDirPhotos, runtimeSettings.DestinationBaseDirVideos, false);
             }
             else
             {
