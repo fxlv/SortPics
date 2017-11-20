@@ -67,6 +67,12 @@ namespace SortPicsLib.Images
             return false;
         }
 
+        public static List<MediaFile> FindImagesFiltered(RuntimeSettings runtimeSettings)
+        {
+            var files = Images.FindImages(runtimeSettings.FullPathToMedia);
+            var imagesFiltered = Images.FilterImagesByDate(files, runtimeSettings.FilterYear, runtimeSettings.FilterMonth, runtimeSettings.FilterDay);
+            return imagesFiltered;
+        }
         /// <summary>
         ///     Find all images in the specified directory.
         /// </summary>
@@ -183,7 +189,7 @@ namespace SortPicsLib.Images
         /// <param name="filterMonth"></param>
         /// <param name="filterDay"></param>
         /// <returns>List of filtered images</returns>
-        public static List<MediaFile> FilterImages(List<MediaFile> images, int filterYear, int filterMonth,
+        public static List<MediaFile> FilterImagesByDate(List<MediaFile> images, int filterYear, int filterMonth,
             int filterDay)
         {
             // return all images by default

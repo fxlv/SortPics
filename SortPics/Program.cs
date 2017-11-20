@@ -17,9 +17,9 @@ namespace SortPics
             if (!optionsParseSuccess)
                 Common.Die("Invalid options specified, please see above for supported options.");
 
-            // call Runtime Settings here
+            // read settings
             var settings = new Settings();
-
+            // create run time settings
             var runtimeSettings = new RuntimeSettings(settings.sourcePath, settings.photosDestinationPath,
                 settings.videosDestinationPath);
             try
@@ -33,9 +33,7 @@ namespace SortPics
 
             // search for images and videos
             Console.WriteLine($"Searching in {runtimeSettings.FullPathToMedia}");
-            var files = Images.FindImages(runtimeSettings.FullPathToMedia);
-
-            var imagesFiltered = Images.FilterImages(files, runtimeSettings.FilterYear, runtimeSettings.FilterMonth, runtimeSettings.FilterDay);
+            var imagesFiltered = Images.FindImagesFiltered(runtimeSettings);
             if (imagesFiltered.Count == 0)
             {
                 Console.WriteLine("No images found matching the filter criteria");
