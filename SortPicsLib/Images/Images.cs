@@ -198,20 +198,20 @@ namespace SortPicsLib.Images
             if (filterYear > 0)
             {
                 Console.WriteLine($"Filtering by year: {filterYear}");
-                imagesFiltered = images.OfType<MediaFile>().Where(s => s.ModificationDate.Year == filterYear).ToList();
+                imagesFiltered = imagesFiltered.OfType<MediaFile>().Where(s => s.ModificationDate.Year == filterYear).ToList();
 
                 // if a month has been prvided as well, narrow it down to that month
                 if (filterMonth > 0)
                 {
                     Console.WriteLine($"Filtering by month: {filterMonth}");
-                    imagesFiltered = images.OfType<MediaFile>().Where(s => s.ModificationDate.Month == filterMonth)
+                    imagesFiltered = imagesFiltered.OfType<MediaFile>().Where(s => s.ModificationDate.Month == filterMonth)
                         .ToList();
 
                     // if a day has been specified as well, narrow it down to that day
                     if (filterDay > 0)
                     {
                         Console.WriteLine($"Filtering by day: {filterDay}");
-                        imagesFiltered = images.OfType<MediaFile>().Where(s => s.ModificationDate.Day == filterDay)
+                        imagesFiltered = imagesFiltered.OfType<MediaFile>().Where(s => s.ModificationDate.Day == filterDay)
                             .ToList();
                     }
                 }
