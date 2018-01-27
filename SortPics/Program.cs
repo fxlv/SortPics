@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq.Expressions;
 using CommandLine;
 using SortPics.Properties;
 using SortPicsLib.Common;
@@ -43,7 +42,7 @@ namespace SortPics
                 Environment.Exit(0);
             }
             Console.WriteLine($" {imagesFiltered.Count} images found");
-
+            var imagesCount = imagesFiltered.Count;
             // present to the user the picture list and ask for confirmation to move
             foreach (var image in imagesFiltered)
                 try
@@ -53,15 +52,23 @@ namespace SortPics
                 }
                 catch (Exception ex)
                 {
-                    if (ex is SortPicsLib.Images.FilesAreTheSameException)
+                    if (ex is FilesAreTheSameException)
                     {
                         Console.WriteLine($"Files are the same: {image}");
-                    } else if (ex is SortPicsLib.Images.FilesAreTheSameButContentsDifferException)
+                        imagesCount -= 1;
+                    }
+                    else if (ex is FilesAreTheSameButContentsDifferException)
                     {
                         Console.WriteLine($"Files are the same, but contents are different: {image}");
                         Console.WriteLine("This is not normal and needs checking.");
+                        imagesCount -= 1;
                     }
                 }
+            if (imagesCount < imagesFiltered.Count)
+            {
+                Console.WriteLine("Please handle the exceptions. Not all images can be moved.");
+                Environment.Exit(0);
+            }
             var response = UserInput.ConfirmContinue("Do you want to continue and move these images?");
             if (response)
             {
