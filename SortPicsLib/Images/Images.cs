@@ -7,6 +7,35 @@ using SortPicsLib.Common;
 
 namespace SortPicsLib.Images
 {
+    public class FilesAreTheSameException : Exception
+    {
+        public FilesAreTheSameException()
+        {
+        }
+
+        public FilesAreTheSameException(string message) : base(message)
+        {
+        }
+
+        public FilesAreTheSameException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+    }
+
+    public class FilesAreTheSameButContentsDifferException : Exception
+    {
+        public FilesAreTheSameButContentsDifferException()
+        {
+        }
+
+        public FilesAreTheSameButContentsDifferException(string message) : base(message)
+        {
+        }
+
+        public FilesAreTheSameButContentsDifferException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+    }
     public class Images
     {
         /// <summary>
@@ -162,13 +191,15 @@ namespace SortPicsLib.Images
             // if it does exist, check if both source and destination files are the same
             if (File.Exists(imageDestinationPath))
             {
-                Console.WriteLine("Interesting, destination file already exists. Will check the hash.");
-
-                if(FileHash.FilesAreTheSame(imageDestinationPath, image.FilePath))
-                    Console.WriteLine("Source and destination files are the same!");
+                if (FileHash.FilesAreTheSame(imageDestinationPath, image.FilePath))
+                {
+                    throw new FilesAreTheSameException();
+                }
                 else
-                    Console.WriteLine("Source and destination files names are the same, but contents are different!");
-                Common.Common.Die($"Error while moving {image.FileName}");
+                {
+                    throw new FilesAreTheSameButContentsDifferException();
+                }
+               
             }
             if (dryRun == false)
             {
