@@ -1,30 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SortPicsLib.Common;
 
 namespace SortPicsLib.Common
 {
     /// <summary>
-    /// Handle run time settings.
+    ///     Handle run time settings.
     /// </summary>
     public class RuntimeSettings
     {
-        public string FullPathToMedia;
         public string DestinationBaseDirPhotos;
         public string DestinationBaseDirVideos;
+        public int FilterDay;
+        public int FilterMonth;
 
         public int FilterYear;
-        public int FilterMonth;
-        public int FilterDay;
+        public string FullPathToMedia;
 
         /// <summary>
-        /// Take in source and destination paths for media as well as CLI options
-        /// and marshal them into usable run time settings.
+        ///     Take in source and destination paths for media as well as CLI options
+        ///     and marshal them into usable run time settings.
         /// </summary>
         /// <param name="sourcePath"></param>
         /// <param name="photosDestinationPath"></param>
@@ -32,16 +27,15 @@ namespace SortPicsLib.Common
         /// <param name="options"></param>
         public RuntimeSettings(string sourcePath, string photosDestinationPath, string videosDestinationPath)
         {
-
-           
             var profilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             // if picturesPath is specified as an argument, use that, if not, use the one from settings
             FullPathToMedia = Path.Combine(profilePath, sourcePath);
             DestinationBaseDirPhotos = Path.Combine(profilePath, photosDestinationPath);
             DestinationBaseDirVideos = Path.Combine(profilePath, videosDestinationPath);
         }
+
         /// <summary>
-        /// Do active substitutions and checks for the settings.
+        ///     Do active substitutions and checks for the settings.
         /// </summary>
         /// <param name="options"></param>
         public void Activate(Options options)
@@ -49,23 +43,21 @@ namespace SortPicsLib.Common
             SubstituteUserOptions(options);
             SubstituteFilters(options);
             CheckThatPathsExist();
-
         }
+
         /// <summary>
-        /// check that both source and destination paths exist
+        ///     check that both source and destination paths exist
         /// </summary>
         private void CheckThatPathsExist()
         {
-            List<string> paths = new List<string>();
+            var paths = new List<string>();
             paths.Add(FullPathToMedia);
             paths.Add(DestinationBaseDirPhotos);
             paths.Add(DestinationBaseDirVideos);
 
             foreach (var path in paths)
-            {
                 if (!Directory.Exists(path))
-                    throw new DirectoryNotFoundException($"Directory {path} not found."); 
-            }
+                    throw new DirectoryNotFoundException($"Directory {path} not found.");
         }
 
         private void SubstituteFilters(Options options)

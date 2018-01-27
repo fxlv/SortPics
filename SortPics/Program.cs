@@ -51,7 +51,8 @@ namespace SortPics
             if (response)
             {
                 foreach (var image in imagesFiltered)
-                    Images.Move(image, runtimeSettings.DestinationBaseDirPhotos, runtimeSettings.DestinationBaseDirVideos, false);
+                    Images.Move(image, runtimeSettings.DestinationBaseDirPhotos,
+                        runtimeSettings.DestinationBaseDirVideos, false);
             }
             else
             {
@@ -62,7 +63,7 @@ namespace SortPics
 
         private static void FirstRun(Settings settings)
         {
-            string line = "---------------------------------------";
+            var line = "---------------------------------------";
             if (!settings.settingsSaved)
             {
                 Console.WriteLine();
@@ -81,7 +82,9 @@ namespace SortPics
                     settings.settingsSaved = true;
                     settings.Save();
                     Console.WriteLine("Updating not implemented yet.");
-                    Console.WriteLine(@"Please go to 'c:\Users\fx\AppData\Local\FX\' and edit the settings file manually.");
+                    var profilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                    Console.WriteLine(
+                        $@"Please go to '{profilePath}\AppData\Local\FX\' and edit the settings file manually.");
                     Environment.Exit(0);
                 }
                 else
