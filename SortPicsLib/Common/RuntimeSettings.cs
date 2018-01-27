@@ -32,6 +32,8 @@ namespace SortPicsLib.Common
         /// <param name="options"></param>
         public RuntimeSettings(string sourcePath, string photosDestinationPath, string videosDestinationPath)
         {
+
+           
             var profilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             // if picturesPath is specified as an argument, use that, if not, use the one from settings
             FullPathToMedia = Path.Combine(profilePath, sourcePath);

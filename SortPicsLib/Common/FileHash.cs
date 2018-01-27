@@ -7,7 +7,7 @@ namespace SortPicsLib.Common
     public class FileHash
     {
         /// <summary>
-        /// Returns MD5 hash of a file.
+        ///     Returns MD5 hash of a file.
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
@@ -21,8 +21,9 @@ namespace SortPicsLib.Common
                 }
             }
         }
+
         /// <summary>
-        /// Check if both files are the same based on their MD5 hashes.
+        ///     Check if both files are the same based on their MD5 hashes.
         /// </summary>
         /// <param name="fileName1"></param>
         /// <param name="fileName2"></param>

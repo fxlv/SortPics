@@ -11,5 +11,8 @@
     <Setting Name="videosDestinationPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">OneDrive\video</Value>
     </Setting>
+    <Setting Name="settingsSaved" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

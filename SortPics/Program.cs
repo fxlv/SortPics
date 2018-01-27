@@ -19,6 +19,8 @@ namespace SortPics
 
             // read settings
             var settings = new Settings();
+            // handle "FirstRun" case where the user is running the app for the first time or the settings have been wiped
+            FirstRun(settings);
             // create run time settings
             var runtimeSettings = new RuntimeSettings(settings.sourcePath, settings.photosDestinationPath,
                 settings.videosDestinationPath);
@@ -55,6 +57,39 @@ namespace SortPics
             {
                 Console.WriteLine("Move aborted.");
                 Environment.Exit(0);
+            }
+        }
+
+        private static void FirstRun(Settings settings)
+        {
+            string line = "---------------------------------------";
+            if (!settings.settingsSaved)
+            {
+                Console.WriteLine();
+                Console.WriteLine(line);
+                Console.WriteLine("First run? Let's set up youf Pictures folders");
+                Console.WriteLine("SortPics needs to know the source directory and destination directory");
+                Console.WriteLine(line);
+                Console.WriteLine("Currently (by default) defined paths look like so:");
+                Console.WriteLine($"Source path: '{settings.sourcePath}'");
+                Console.WriteLine($"Destination path for pictures: '{settings.photosDestinationPath}'");
+                Console.WriteLine($"Destination path for videos: '{settings.videosDestinationPath}'");
+                var response = UserInput.ConfirmContinue("Do you want to change these paths?");
+                if (response)
+                {
+                    // todo: implememt interactive settings update
+                    settings.settingsSaved = true;
+                    settings.Save();
+                    Console.WriteLine("Updating not implemented yet.");
+                    Console.WriteLine(@"Please go to 'c:\Users\fx\AppData\Local\FX\' and edit the settings file manually.");
+                    Environment.Exit(0);
+                }
+                else
+                {
+                    Console.WriteLine("Allrighty then. Saving settings.");
+                    settings.settingsSaved = true;
+                    settings.Save();
+                }
             }
         }
     }
