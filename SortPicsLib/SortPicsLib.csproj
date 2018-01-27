@@ -55,6 +55,7 @@
     <Compile Include="Common\Options.cs" />
     <Compile Include="Common\RuntimeSettings.cs" />
     <Compile Include="Common\UserInput.cs" />
+    <Compile Include="Images\Exceptions.cs" />
     <Compile Include="Images\Images.cs" />
     <Compile Include="Images\MediaFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

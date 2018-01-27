@@ -7,35 +7,6 @@ using SortPicsLib.Common;
 
 namespace SortPicsLib.Images
 {
-    public class FilesAreTheSameException : Exception
-    {
-        public FilesAreTheSameException()
-        {
-        }
-
-        public FilesAreTheSameException(string message) : base(message)
-        {
-        }
-
-        public FilesAreTheSameException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
-    }
-
-    public class FilesAreTheSameButContentsDifferException : Exception
-    {
-        public FilesAreTheSameButContentsDifferException()
-        {
-        }
-
-        public FilesAreTheSameButContentsDifferException(string message) : base(message)
-        {
-        }
-
-        public FilesAreTheSameButContentsDifferException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
-    }
     public class Images
     {
         /// <summary>
@@ -98,10 +69,12 @@ namespace SortPicsLib.Images
 
         public static List<MediaFile> FindImagesFiltered(RuntimeSettings runtimeSettings)
         {
-            var files = Images.FindImages(runtimeSettings.FullPathToMedia);
-            var imagesFiltered = Images.FilterImagesByDate(files, runtimeSettings.FilterYear, runtimeSettings.FilterMonth, runtimeSettings.FilterDay);
+            var files = FindImages(runtimeSettings.FullPathToMedia);
+            var imagesFiltered = FilterImagesByDate(files, runtimeSettings.FilterYear, runtimeSettings.FilterMonth,
+                runtimeSettings.FilterDay);
             return imagesFiltered;
         }
+
         /// <summary>
         ///     Find all images in the specified directory.
         /// </summary>
@@ -127,8 +100,8 @@ namespace SortPicsLib.Images
         }
 
         /// <summary>
-        /// Create specified directory if it does not exist yet,
-        /// ask user for confirmation.
+        ///     Create specified directory if it does not exist yet,
+        ///     ask user for confirmation.
         /// </summary>
         /// <param name="path"></param>
         public static void CreateDirectoryIfNotExists(string path)
@@ -149,6 +122,7 @@ namespace SortPicsLib.Images
                 }
             }
         }
+
         /// <summary>
         ///     Move one image to the right destination path.
         /// </summary>
@@ -184,23 +158,16 @@ namespace SortPicsLib.Images
             // todo: decouple directory checks from Move()
             // todo: don't interact with user from within a library
             if (!dryRun)
-               CreateDirectoryIfNotExists(imageDestinationDirectory);
+                CreateDirectoryIfNotExists(imageDestinationDirectory);
 
             // source and destination file paths prepared
             // make sure that destination file does not yet exist
             // if it does exist, check if both source and destination files are the same
             if (File.Exists(imageDestinationPath))
-            {
                 if (FileHash.FilesAreTheSame(imageDestinationPath, image.FilePath))
-                {
                     throw new FilesAreTheSameException();
-                }
                 else
-                {
                     throw new FilesAreTheSameButContentsDifferException();
-                }
-               
-            }
             if (dryRun == false)
             {
                 Console.WriteLine($"Moving: {image.FilePath} ==> {imageDestinationPath}");
@@ -229,20 +196,23 @@ namespace SortPicsLib.Images
             if (filterYear > 0)
             {
                 Console.WriteLine($"Filtering by year: {filterYear}");
-                imagesFiltered = imagesFiltered.OfType<MediaFile>().Where(s => s.ModificationDate.Year == filterYear).ToList();
+                imagesFiltered = imagesFiltered.OfType<MediaFile>().Where(s => s.ModificationDate.Year == filterYear)
+                    .ToList();
 
                 // if a month has been prvided as well, narrow it down to that month
                 if (filterMonth > 0)
                 {
                     Console.WriteLine($"Filtering by month: {filterMonth}");
-                    imagesFiltered = imagesFiltered.OfType<MediaFile>().Where(s => s.ModificationDate.Month == filterMonth)
+                    imagesFiltered = imagesFiltered.OfType<MediaFile>()
+                        .Where(s => s.ModificationDate.Month == filterMonth)
                         .ToList();
 
                     // if a day has been specified as well, narrow it down to that day
                     if (filterDay > 0)
                     {
                         Console.WriteLine($"Filtering by day: {filterDay}");
-                        imagesFiltered = imagesFiltered.OfType<MediaFile>().Where(s => s.ModificationDate.Day == filterDay)
+                        imagesFiltered = imagesFiltered.OfType<MediaFile>()
+                            .Where(s => s.ModificationDate.Day == filterDay)
                             .ToList();
                     }
                 }
