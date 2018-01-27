@@ -19,20 +19,12 @@ namespace SortPicsLib.Images
             CreationDate = File.GetCreationTime(FilePath);
             MimeType = Images.GetMimeType(FilePath);
             if (Images.IsImage(FilePath))
-            {
                 IsImage = true;
-            }
             else if (Images.IsVideo(FilePath))
-            {
                 IsVideo = true;
-                // todo: add unit test for Video files
-            }
             else
-            {
                 throw new FormatException("Unsupported file type.");
-            }
             GetExifData();
-
         }
 
         public string FilePath { set; get; }
