@@ -76,12 +76,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_2304F436C2F25E9EC76A460D27052A96"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_DD207A5FA4BC447CB41CC2474B953B18"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -115,6 +109,12 @@
         "OwnerKey" = "8:_8BA3F0020A43264987481FF8B30C2B4C"
         "MsmSig" = "8:_UNDEFINED"
         }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_2304F436C2F25E9EC76A460D27052A96"
+        "MsmSig" = "8:_UNDEFINED"
+        }
     }
     "Configurations"
     {
@@ -133,6 +133,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -149,6 +165,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -419,9 +443,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Installer"
+        "ProductName" = "8:SortPics"
         "ProductCode" = "8:{CD141A99-017A-45E4-A8BD-5A1DC290838C}"
-        "PackageCode" = "8:{07009300-1C92-4A3D-9C47-AECC56B2098F}"
+        "PackageCode" = "8:{64044939-8812-4D4C-8FD1-4BF74DABFCE5}"
         "UpgradeCode" = "8:{9BA8B944-2E7A-44A1-BD55-B9DFCAA65270}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -432,7 +456,7 @@
         "Manufacturer" = "8:FX"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Installer"
+        "Title" = "8:SortPics"
         "Subject" = "8:"
         "ARPCONTACT" = "8:FX"
         "Keywords" = "8:"
@@ -541,6 +565,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_372FC6352BFB4C20A9789456E932A2E4"
+            {
+            "Name" = "8:SortPics"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_DD207A5FA4BC447CB41CC2474B953B18"
+            "Folder" = "8:_758B82B57D0742F5896339C62001C60A"
+            "WorkingFolder" = "8:_43CFA33CB8DB45DC876448FC0266000F"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {
