@@ -13,8 +13,7 @@ namespace SortPicsLib.Images
         public string Path;
 
         public Destination(MediaFile image, string destinationBaseDirPhotos, string destinationBaseDirVideos)
-        { 
-
+        {
             if (image.IsVideo)
             {
                 Directory = System.IO.Path.Combine(destinationBaseDirVideos, image.MediaFileYear, image.MediaFileMonth);
@@ -131,7 +130,7 @@ namespace SortPicsLib.Images
                 Directory.CreateDirectory(path);
         }
 
-        
+
         /// <summary>
         ///     Move one image to the right destination path.
         /// </summary>
@@ -143,7 +142,7 @@ namespace SortPicsLib.Images
             bool dryRun = true)
         {
             // todo: refactor so that there would be no need to pass two destination arguments for each: photos and videos
-            
+
             var destination = new Destination(image, destinationBaseDirPhotos, destinationBaseDirVideos);
 
             // todo: decouple directory checks from Move()

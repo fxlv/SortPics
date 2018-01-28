@@ -220,22 +220,6 @@ namespace Tests
             Directory.Delete(destinationBaseDirPhotosWithYear, true); // cleanup
         }
 
-        [Test]
-        public void TestMoveImageFileExists()
-        {
-            var destination = new Destination(TestImage1, destinationBaseDirPhotos, destinationBaseDirVideos);
-            Images.CreateDirectoryIfNotExists(destination.Directory);
-            File.Copy(TestImage1.FilePath, destination.Path);
-            Assert.Throws<SortPicsLib.Images.FilesAreTheSameException>(() => Images.Move(TestImage1, destinationBaseDirPhotos, destinationBaseDirVideos, false));
-
-        }
-
-        [Test]
-        public void TestMoveImageFileExistsButContentsDiffer()
-        {
-            //
-        }
-
 
         [Test]
         public void TestMoveImageDryRun()
@@ -254,6 +238,22 @@ namespace Tests
             Images.Move(testImagePng, destinationBaseDirPhotos, destinationBaseDirVideos);
             // verify that in fact nothing changed, as this was a dry run
             Assert.IsFalse(File.Exists(destinationFileAfterMove));
+        }
+
+        [Test]
+        public void TestMoveImageFileExists()
+        {
+            var destination = new Destination(TestImage1, destinationBaseDirPhotos, destinationBaseDirVideos);
+            Images.CreateDirectoryIfNotExists(destination.Directory);
+            File.Copy(TestImage1.FilePath, destination.Path);
+            Assert.Throws<FilesAreTheSameException>(() =>
+                Images.Move(TestImage1, destinationBaseDirPhotos, destinationBaseDirVideos, false));
+        }
+
+        [Test]
+        public void TestMoveImageFileExistsButContentsDiffer()
+        {
+            //
         }
 
         [Test]
