@@ -7,6 +7,27 @@ using SortPicsLib.Common;
 
 namespace SortPicsLib.Images
 {
+    public class Destination
+    {
+        public string Directory;
+        public string Path;
+
+        public Destination(MediaFile image, string destinationBaseDirPhotos, string destinationBaseDirVideos)
+        { 
+
+            if (image.IsVideo)
+            {
+                Directory = System.IO.Path.Combine(destinationBaseDirVideos, image.MediaFileYear, image.MediaFileMonth);
+                Path = System.IO.Path.Combine(Directory, image.FileName);
+            }
+            else if (image.IsImage)
+            {
+                Directory = System.IO.Path.Combine(destinationBaseDirPhotos, image.MediaFileYear, image.MediaFileMonth);
+                Path = System.IO.Path.Combine(Directory, image.FileName);
+            }
+        }
+    }
+
     public class Images
     {
         /// <summary>
