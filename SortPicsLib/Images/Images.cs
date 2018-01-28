@@ -128,22 +128,10 @@ namespace SortPicsLib.Images
         public static void CreateDirectoryIfNotExists(string path)
         {
             if (!Directory.Exists(path))
-            {
-                Console.WriteLine($"Destination directory {path} doest not exist!");
-                var response = UserInput.ConfirmContinue("Do you want to create the destination directory?");
-                //todo: don't interact with user from library
-                if (response)
-                {
-                    Console.WriteLine($"Creating {path}");
-                    Directory.CreateDirectory(path);
-                }
-                else
-                {
-                    Common.Common.Die($"Destination directory '{path}' does not exist!");
-                }
-            }
+                Directory.CreateDirectory(path);
         }
 
+        
         /// <summary>
         ///     Move one image to the right destination path.
         /// </summary>
@@ -155,48 +143,30 @@ namespace SortPicsLib.Images
             bool dryRun = true)
         {
             // todo: refactor so that there would be no need to pass two destination arguments for each: photos and videos
-            var mediaFileYear = image.ModificationDate.Year.ToString();
-            var mediaFileMonth = image.ModificationDate.Month.ToString().PadLeft(2, '0');
+            
+            var destination = new Destination(image, destinationBaseDirPhotos, destinationBaseDirVideos);
 
-            var imageDestinationDirectory = "";
-            var imageDestinationPath = "";
-
-            if (image.IsVideo)
-            {
-                imageDestinationDirectory = Path.Combine(destinationBaseDirVideos, mediaFileYear, mediaFileMonth);
-                imageDestinationPath = Path.Combine(imageDestinationDirectory, image.FileName);
-            }
-            else if (image.IsImage)
-            {
-                imageDestinationDirectory = Path.Combine(destinationBaseDirPhotos, mediaFileYear, mediaFileMonth);
-                imageDestinationPath = Path.Combine(imageDestinationDirectory, image.FileName);
-            }
-            else
-            {
-                // todo: replace with exception
-                Common.Common.Die("Unrecognized file type. Cannot continue.");
-            }
             // todo: decouple directory checks from Move()
             // todo: don't interact with user from within a library
             if (!dryRun)
-                CreateDirectoryIfNotExists(imageDestinationDirectory);
+                CreateDirectoryIfNotExists(destination.Directory);
 
             // source and destination file paths prepared
             // make sure that destination file does not yet exist
             // if it does exist, check if both source and destination files are the same
-            if (File.Exists(imageDestinationPath))
-                if (FileHash.FilesAreTheSame(imageDestinationPath, image.FilePath))
+            if (File.Exists(destination.Path))
+                if (FileHash.FilesAreTheSame(destination.Path, image.FilePath))
                     throw new FilesAreTheSameException();
                 else
                     throw new FilesAreTheSameButContentsDifferException();
             if (dryRun == false)
             {
-                Console.WriteLine($"Moving: {image.FilePath} ==> {imageDestinationPath}");
-                File.Move(image.FilePath, imageDestinationPath);
+                Console.WriteLine($"Moving: {image.FilePath} ==> {destination.Path}");
+                File.Move(image.FilePath, destination.Path);
             }
             else
             {
-                Console.WriteLine($"(dry run) Moving: {image.FilePath} ==> {imageDestinationPath}");
+                Console.WriteLine($"(dry run) Moving: {image.FilePath} ==> {destination.Path}");
             }
         }
 

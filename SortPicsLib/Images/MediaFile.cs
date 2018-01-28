@@ -23,10 +23,14 @@ namespace SortPicsLib.Images
             else if (Images.IsVideo(FilePath))
                 IsVideo = true;
             else
-                throw new FormatException("Unsupported file type.");
+                throw new UnsupportedFileTypeException("Unsupported file type.");
             GetExifData();
+            MediaFileYear = ModificationDate.Year.ToString();
+            MediaFileMonth = ModificationDate.Month.ToString().PadLeft(2, '0');
         }
 
+        public string MediaFileMonth { get; set; }
+        public string MediaFileYear { get; set; }
         public string FilePath { set; get; }
         public DateTime ModificationDate { set; get; }
         public DateTime CreationDate { set; get; }

@@ -83,6 +83,7 @@ namespace SortPics
             }
         }
 
+        
         private static void FirstRun(Settings settings)
         {
             var line = "---------------------------------------";
