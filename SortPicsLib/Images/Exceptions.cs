@@ -12,9 +12,7 @@ namespace SortPicsLib.Images
         {
         }
 
-        public FilesAreTheSameException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
+
     }
 
     public class FilesAreTheSameButContentsDifferException : Exception
@@ -27,24 +25,15 @@ namespace SortPicsLib.Images
         {
         }
 
-        public FilesAreTheSameButContentsDifferException(string message, Exception innerException) : base(message,
-            innerException)
-        {
-        }
+
     }
 
     public class UnsupportedFileTypeException : Exception
     {
-        public UnsupportedFileTypeException()
-        {
-        }
 
         public UnsupportedFileTypeException(string message) : base(message)
         {
         }
 
-        public UnsupportedFileTypeException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
     }
 }

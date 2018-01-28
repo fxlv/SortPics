@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using SortPicsLib.Common;
 using SortPicsLib.Images;
 
@@ -19,6 +20,7 @@ namespace Tests
         public string TestFileNotMediaFile;
 
         public MediaFile TestImage1;
+        public MediaFile TestImage2;
 
         private string imagesDirectory;
         private string destinationBaseDirPhotos;
@@ -47,6 +49,7 @@ namespace Tests
             images = Images.FindImages(imagesDirectory);
             // todo: add all images as TestImages here and remove from other methods
             TestImage1 = images.FirstOrDefault(s => s.FileName == "20170224_115931000_iOS.png");
+            TestImage2 = images.FirstOrDefault(s => s.FileName == "20170126_012712498_iOS.jpg");
 
             // create new directories for testing media file moving
             Directory.CreateDirectory(destinationBaseDirPhotos);
@@ -253,7 +256,11 @@ namespace Tests
         [Test]
         public void TestMoveImageFileExistsButContentsDiffer()
         {
-            //
+            var destination = new Destination(TestImage2, destinationBaseDirPhotos, destinationBaseDirVideos);
+            Images.CreateDirectoryIfNotExists(destination.Directory);
+            // copy image1 to image2 destination, this way creating situation where destination image exists with same name but the contents are different
+            File.Copy(TestImage1.FilePath, destination.Path);
+            Assert.Throws<FilesAreTheSameButContentsDifferException>(() => Images.Move(TestImage2, destinationBaseDirPhotos, destinationBaseDirVideos, false));
         }
 
         [Test]
@@ -263,5 +270,32 @@ namespace Tests
             Assert.IsTrue(testImagePng.IsImage);
             Assert.AreEqual(testImagePng.MimeType, "image/png");
         }
+
+        [Test]
+        public void TestFilesAreTheSameException()
+        {
+            const string exceptionMessage = "Oh no, files are the same";
+            var exception =
+                Assert.Throws<FilesAreTheSameException>(() => throw new SortPicsLib.Images.FilesAreTheSameException(exceptionMessage));
+            Assert.That(exception.Message, Is.EqualTo(exceptionMessage));
+        }
+
+        [Test]
+        public void TestFilesAreTheSameButContentsDifferException()
+        {
+            const string exceptionMessage = "Oh no, files are the same, but contents are not";
+            var exception =
+                Assert.Throws<FilesAreTheSameButContentsDifferException>(() => throw new SortPicsLib.Images.FilesAreTheSameButContentsDifferException(exceptionMessage));
+            Assert.That(exception.Message, Is.EqualTo(exceptionMessage));
+        }
+
+        [Test]
+        public void TestDestinationImage()
+        {
+            var destination = new Destination(TestImage1, destinationBaseDirPhotos, destinationBaseDirVideos);
+           
+            Assert.That(destination.Path, Is.EqualTo(System.IO.Path.Combine(System.IO.Path.Combine(destinationBaseDirPhotos, TestImage1.MediaFileYear, TestImage1.MediaFileMonth), TestImage1.FileName)));
+        }
+
     }
 }
