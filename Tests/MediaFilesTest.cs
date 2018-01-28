@@ -18,6 +18,8 @@ namespace Tests
         public string TestFile3;
         public string TestFileNotMediaFile;
 
+        public MediaFile TestImage1;
+
         private string imagesDirectory;
         private string destinationBaseDirPhotos;
         private string destinationBaseDirVideos;
@@ -43,6 +45,8 @@ namespace Tests
             File.SetLastWriteTime(TestFile3, new DateTime(2017, 2, 12)); // February 12th 2017
             // populate List<MediaFile> for later consumption by tests  
             images = Images.FindImages(imagesDirectory);
+            // todo: add all images as TestImages here and remove from other methods
+            TestImage1 = images.FirstOrDefault(s => s.FileName == "20170224_115931000_iOS.png");
 
             // create new directories for testing media file moving
             Directory.CreateDirectory(destinationBaseDirPhotos);
@@ -185,7 +189,7 @@ namespace Tests
         [Test]
         public void TestMediaFileInstanceNotMediaFile()
         {
-            var exception = Assert.Throws<FormatException>(() => new MediaFile(TestFileNotMediaFile));
+            var exception = Assert.Throws<UnsupportedFileTypeException>(() => new MediaFile(TestFileNotMediaFile));
             Assert.That(exception.Message, Is.EqualTo("Unsupported file type."));
         }
 
@@ -214,6 +218,22 @@ namespace Tests
             // verify that it exists in destination dir now
             Assert.IsTrue(File.Exists(destinationFileAfterMove));
             Directory.Delete(destinationBaseDirPhotosWithYear, true); // cleanup
+        }
+
+        [Test]
+        public void TestMoveImageFileExists()
+        {
+            var destination = new Destination(TestImage1, destinationBaseDirPhotos, destinationBaseDirVideos);
+            Images.CreateDirectoryIfNotExists(destination.Directory);
+            File.Copy(TestImage1.FilePath, destination.Path);
+            Assert.Throws<SortPicsLib.Images.FilesAreTheSameException>(() => Images.Move(TestImage1, destinationBaseDirPhotos, destinationBaseDirVideos, false));
+
+        }
+
+        [Test]
+        public void TestMoveImageFileExistsButContentsDiffer()
+        {
+            //
         }
 
 
