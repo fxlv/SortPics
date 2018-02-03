@@ -12,23 +12,19 @@ namespace Tests
     [TestFixture]
     public class MediaFilesTest
     {
-        // set up fields
+        #region Define fields
         public string TestFile1;
-
         public string TestFile2;
         public string TestFile3;
         public string TestFileNotMediaFile;
-
         public MediaFile TestImage1;
         public MediaFile TestImage2;
-
         private string imagesDirectory;
         private string destinationBaseDirPhotos;
         private string destinationBaseDirVideos;
         private RuntimeSettings runtimeSettings;
-
         private List<MediaFile> images;
-
+        #endregion
         [OneTimeSetUp]
         public void SetUpImages()
         {
@@ -130,6 +126,13 @@ namespace Tests
         {
             var imagesFiltered = Images.FilterImagesByDate(images, 2015, 3, 0);
             Assert.AreEqual(0, imagesFiltered.Count);
+        }
+
+        [Test]
+        public void TestFilteringByYearAndMonthAndDay()
+        {
+            var imagesFiltered = Images.FilterImagesByDate(images, 2017, 1, 10);
+            Assert.AreEqual(1, imagesFiltered.Count);
         }
 
         [Test]
