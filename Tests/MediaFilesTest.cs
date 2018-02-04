@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using CommandLine;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using SortPicsLib.Common;
@@ -50,7 +51,7 @@ namespace Tests
             // create new directories for testing media file moving
             Directory.CreateDirectory(destinationBaseDirPhotos);
             Directory.CreateDirectory(destinationBaseDirVideos);
-
+           
             runtimeSettings = new RuntimeSettings(imagesDirectory, destinationBaseDirPhotos,
                 destinationBaseDirVideos);
             runtimeSettings.FilterYear = 2017;
@@ -154,6 +155,22 @@ namespace Tests
             Assert.AreEqual(0, images.Count);
         }
 
+        [Test]
+        public void TestRuntimeSettingsFilterSubstitution()
+        {
+            string[] args = {"something", "cool"};
+            var options = new Options();
+            var optionsParseSuccess = Parser.Default.ParseArguments(args, options);
+            runtimeSettings = new RuntimeSettings(imagesDirectory, destinationBaseDirPhotos,
+                destinationBaseDirVideos);
+            // test filter substitution
+            options.FilterDay = 1;
+            Assert.AreNotEqual(runtimeSettings.FilterDay, options.FilterDay);
+            runtimeSettings.Activate(options);
+            // now after substituion they will be equal
+            Assert.AreEqual(runtimeSettings.FilterDay, options.FilterDay);
+
+        }
         [Test]
         public void TestGeoTagging()
         {
