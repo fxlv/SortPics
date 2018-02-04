@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using CommandLine;
@@ -378,5 +379,6 @@ namespace Tests
             Assert.That(destination.Path, Is.EqualTo(System.IO.Path.Combine(System.IO.Path.Combine(destinationBaseDirPhotos, TestImage1.MediaFileYear, TestImage1.MediaFileMonth), TestImage1.FileName)));
         }
 
+       
     }
 }

@@ -15,7 +15,7 @@ namespace SortPics
             var options = new Options();
             var optionsParseSuccess = Parser.Default.ParseArguments(args, options);
             if (!optionsParseSuccess)
-                Common.Die("Invalid options specified, please see above for supported options.");
+                Die("Invalid options specified, please see above for supported options.");
 
             // read settings
             var settings = new Settings();
@@ -30,7 +30,7 @@ namespace SortPics
             }
             catch (DirectoryNotFoundException e)
             {
-                Common.Die(e.Message);
+                Die(e.Message);
             }
 
             // search for images and videos
@@ -69,7 +69,7 @@ namespace SortPics
                 Console.WriteLine("Please handle the exceptions. Not all images can be moved.");
                 Environment.Exit(0);
             }
-            var response = UserInput.ConfirmContinue("Do you want to continue and move these images?");
+            var response = ConfirmContinue("Do you want to continue and move these images?");
             if (response)
             {
                 foreach (var image in imagesFiltered)
@@ -98,7 +98,7 @@ namespace SortPics
                 Console.WriteLine($"Source path: '{settings.sourcePath}'");
                 Console.WriteLine($"Destination path for pictures: '{settings.photosDestinationPath}'");
                 Console.WriteLine($"Destination path for videos: '{settings.videosDestinationPath}'");
-                var response = UserInput.ConfirmContinue("Do you want to change these paths?");
+                var response = ConfirmContinue("Do you want to change these paths?");
                 if (response)
                 {
                     // todo: implememt interactive settings update
@@ -115,6 +115,36 @@ namespace SortPics
                     Console.WriteLine("Allrighty then. Saving settings.");
                     settings.settingsSaved = true;
                     settings.Save();
+                }
+            }
+        }
+        /// <summary>
+        ///     Exit and optionally print an error message.
+        /// </summary>
+        /// <param name="msg"></param>
+        public static void Die(string msg = null)
+        {
+            if (msg != null)
+                Console.WriteLine($"ERROR: {msg}");
+            Environment.Exit(1);
+        }
+
+        public static bool ConfirmContinue(string msg = null)
+        {
+            while (true)
+            {
+                if (msg != null)
+                    Console.WriteLine(msg);
+                Console.Write("Please answer with y/n: ");
+                var userResponse = Console.ReadLine();
+                switch (userResponse)
+                {
+                    case "y":
+                        return true;
+                    case "n":
+                        return false;
+                    default:
+                        continue;
                 }
             }
         }

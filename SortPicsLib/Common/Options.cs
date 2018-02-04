@@ -41,21 +41,5 @@ namespace SortPicsLib.Common
             help.AddOptions(this);
             return help;
         }
-
-        /// <summary>
-        ///     Print usage message and exit.
-        /// </summary>
-        /// <param name="msg"></param>
-        public void PrintUsage(string msg = null)
-        {
-            if (msg != null)
-            {
-                Console.WriteLine(msg);
-                Console.WriteLine();
-            }
-            Console.Write(GetUsage());
-
-            Environment.Exit(0);
-        }
     }
 }
