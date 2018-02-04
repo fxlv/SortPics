@@ -25,6 +25,7 @@ namespace Tests
         private string destinationBaseDirPhotos;
         private string destinationBaseDirVideos;
         private string destinationBaseDirSubstitutionTest;
+        private string destinationBaseDirSubstitutionTest2;
 
         private RuntimeSettings runtimeSettings;
         private List<MediaFile> images;
@@ -39,6 +40,7 @@ namespace Tests
             destinationBaseDirPhotos = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "destinationPhotos");
             // these to used for substitution tests only
             destinationBaseDirSubstitutionTest = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "destinationSubstitutionTest");
+            destinationBaseDirSubstitutionTest2 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "destinationSubstitutionTest2");
 
 
             // in order for tests to work, we need to ensure that file modification dates are set accordingly
@@ -214,6 +216,22 @@ namespace Tests
             // now after substituion they will be equal
             Assert.AreEqual(runtimeSettings.DestinationBaseDirPhotos, options.ImagesDestinationPath);
         }
+
+        [Test]
+        public void TestRuntimeSettingsActivateCheckThatPathsExist()
+        {
+            string[] args = { "something", "cool" };
+            var options = new Options();
+            var optionsParseSuccess = Parser.Default.ParseArguments(args, options);
+            runtimeSettings = new RuntimeSettings(imagesDirectory, destinationBaseDirPhotos,
+                destinationBaseDirVideos);
+            // use defined but non-existant directory
+            options.ImagesDestinationPath = destinationBaseDirSubstitutionTest2;
+            var exception =
+                Assert.Throws<DirectoryNotFoundException>(() => runtimeSettings.Activate(options));
+            Assert.That(exception.Message, Is.EqualTo($"Directory {destinationBaseDirSubstitutionTest2} not found."));
+        }
+
         [Test]
         public void TestGeoTagging()
         {
