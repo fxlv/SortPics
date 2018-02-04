@@ -21,8 +21,11 @@ namespace Tests
         public MediaFile TestImage1;
         public MediaFile TestImage2;
         private string imagesDirectory;
+        private string imagesDirectory2;
         private string destinationBaseDirPhotos;
         private string destinationBaseDirVideos;
+        private string destinationBaseDirSubstitutionTest;
+
         private RuntimeSettings runtimeSettings;
         private List<MediaFile> images;
         #endregion
@@ -30,8 +33,13 @@ namespace Tests
         public void SetUpImages()
         {
             imagesDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "testfiles");
+            imagesDirectory2 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "testfiles2");
+            Directory.CreateDirectory(imagesDirectory2);
             destinationBaseDirVideos = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "destinationVideos");
             destinationBaseDirPhotos = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "destinationPhotos");
+            // these to used for substitution tests only
+            destinationBaseDirSubstitutionTest = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "destinationSubstitutionTest");
+
 
             // in order for tests to work, we need to ensure that file modification dates are set accordingly
             // as they will break if doing a clean checkout
@@ -51,6 +59,7 @@ namespace Tests
             // create new directories for testing media file moving
             Directory.CreateDirectory(destinationBaseDirPhotos);
             Directory.CreateDirectory(destinationBaseDirVideos);
+            Directory.CreateDirectory(destinationBaseDirSubstitutionTest);
            
             runtimeSettings = new RuntimeSettings(imagesDirectory, destinationBaseDirPhotos,
                 destinationBaseDirVideos);
@@ -64,6 +73,8 @@ namespace Tests
             Directory.Delete(destinationBaseDirPhotos, true);
             Directory.Delete(destinationBaseDirVideos, true);
             Directory.Delete(imagesDirectory, true);
+            Directory.Delete(imagesDirectory2, true);
+            Directory.Delete(destinationBaseDirSubstitutionTest, true);
         }
 
         [Test]
@@ -170,6 +181,38 @@ namespace Tests
             // now after substituion they will be equal
             Assert.AreEqual(runtimeSettings.FilterDay, options.FilterDay);
 
+        }
+        [Test]
+        public void TestRuntimeSettingsOptionsImagesSourcePathSubstitution()
+        {
+            string[] args = { "something", "cool" };
+            var options = new Options();
+            var optionsParseSuccess = Parser.Default.ParseArguments(args, options);
+            runtimeSettings = new RuntimeSettings(imagesDirectory, destinationBaseDirPhotos,
+                destinationBaseDirVideos);
+            // test options substitution by overriding imagesSourcePath
+            options.ImagesSourcePath = imagesDirectory2;
+            Assert.AreNotEqual(runtimeSettings.FullPathToMedia, options.ImagesSourcePath);
+            runtimeSettings.Activate(options);
+            // now after substituion they will be equal
+            Assert.AreEqual(runtimeSettings.FullPathToMedia, options.ImagesSourcePath);
+
+
+        }
+        [Test]
+        public void TestRuntimeSettingsOptionsDestinationBaseDirSubstitution()
+        {
+            string[] args = { "something", "cool" };
+            var options = new Options();
+            var optionsParseSuccess = Parser.Default.ParseArguments(args, options);
+            runtimeSettings = new RuntimeSettings(imagesDirectory, destinationBaseDirPhotos,
+                destinationBaseDirVideos);
+            // test options substitution by overriding imagesSourcePath
+            options.ImagesDestinationPath = destinationBaseDirSubstitutionTest;
+            Assert.AreNotEqual(runtimeSettings.DestinationBaseDirPhotos, options.ImagesDestinationPath);
+            runtimeSettings.Activate(options);
+            // now after substituion they will be equal
+            Assert.AreEqual(runtimeSettings.DestinationBaseDirPhotos, options.ImagesDestinationPath);
         }
         [Test]
         public void TestGeoTagging()
