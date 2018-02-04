@@ -21,6 +21,7 @@ namespace Tests
         public string TestFileNotMediaFile;
         public MediaFile TestImage1;
         public MediaFile TestImage2;
+        public MediaFile TestVideo1;
         private string imagesDirectory;
         private string imagesDirectory2;
         private string destinationBaseDirPhotos;
@@ -58,6 +59,7 @@ namespace Tests
             // todo: add all images as TestImages here and remove from other methods
             TestImage1 = images.FirstOrDefault(s => s.FileName == "20170224_115931000_iOS.png");
             TestImage2 = images.FirstOrDefault(s => s.FileName == "20170126_012712498_iOS.jpg");
+            TestVideo1 = images.FirstOrDefault(s => s.FileName == "sea.mp4");
 
             // create new directories for testing media file moving
             Directory.CreateDirectory(destinationBaseDirPhotos);
@@ -83,7 +85,7 @@ namespace Tests
         [Test]
         public void ImagesCountIsCorrect()
         {
-            Assert.AreEqual(images.Count, 5);
+            Assert.AreEqual(images.Count, 6);
         }
 
         [Test]
@@ -378,7 +380,23 @@ namespace Tests
            
             Assert.That(destination.Path, Is.EqualTo(System.IO.Path.Combine(System.IO.Path.Combine(destinationBaseDirPhotos, TestImage1.MediaFileYear, TestImage1.MediaFileMonth), TestImage1.FileName)));
         }
+        [Test]
+        public void TestCreationDate()
+        {
+            // expect creation day 04.02.18.
+            Assert.AreEqual(TestVideo1.CreationDate.Day, 4);
+            Assert.AreEqual(TestVideo1.CreationDate.Month, 2);
 
-       
+        }
+        [Test]
+        public void TestDestinationVideo()
+        {
+            var destination = new Destination(TestVideo1, destinationBaseDirPhotos, destinationBaseDirVideos);
+           
+
+            Assert.That(destination.Path, Is.EqualTo(System.IO.Path.Combine(System.IO.Path.Combine(destinationBaseDirVideos, TestVideo1.MediaFileYear, TestVideo1.MediaFileMonth), TestVideo1.FileName)));
+        }
+
+
     }
 }
