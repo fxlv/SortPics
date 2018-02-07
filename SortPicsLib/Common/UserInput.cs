@@ -1,9 +1,6 @@
-﻿using System;
-
-namespace SortPicsLib.Common
+﻿namespace SortPicsLib.Common
 {
     public class UserInput
     {
-        
     }
 }

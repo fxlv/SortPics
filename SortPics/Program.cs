@@ -118,6 +118,7 @@ namespace SortPics
                 }
             }
         }
+
         /// <summary>
         ///     Exit and optionally print an error message.
         /// </summary>

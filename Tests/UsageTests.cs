@@ -8,9 +8,6 @@ namespace Tests
     [TestFixture]
     public class UsageTests
     {
-        private StringWriter sw;
-        private TextWriter originalOutput;
-
         [SetUp]
         public void SetUpImages()
 
@@ -32,6 +29,9 @@ namespace Tests
             Console.SetOut(originalOutput);
         }
 
+        private StringWriter sw;
+        private TextWriter originalOutput;
+
         [Test]
         public void TestGetUsage()
         {
@@ -39,7 +39,5 @@ namespace Tests
             var optionsString = options.GetUsage();
             Assert.That(optionsString.Contains("Usage: .\\SortPics -y 2017\n\n"));
         }
-
-       
     }
 }
