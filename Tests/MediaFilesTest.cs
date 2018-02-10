@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using CommandLine;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using SortPicsLib.Common;
 using SortPicsLib.Images;
 
@@ -14,7 +12,6 @@ namespace Tests
     [TestFixture]
     public class MediaFilesTest
     {
-        #region Define fields
         public string TestFile1;
         public string TestFile2;
         public string TestFile3;
@@ -31,7 +28,7 @@ namespace Tests
 
         private RuntimeSettings runtimeSettings;
         private List<MediaFile> images;
-        #endregion
+
         [OneTimeSetUp]
         public void SetUpImages()
         {
@@ -41,8 +38,10 @@ namespace Tests
             destinationBaseDirVideos = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "destinationVideos");
             destinationBaseDirPhotos = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "destinationPhotos");
             // these to used for substitution tests only
-            destinationBaseDirSubstitutionTest = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "destinationSubstitutionTest");
-            destinationBaseDirSubstitutionTest2 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "destinationSubstitutionTest2");
+            destinationBaseDirSubstitutionTest =
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "destinationSubstitutionTest");
+            destinationBaseDirSubstitutionTest2 =
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "destinationSubstitutionTest2");
 
 
             // in order for tests to work, we need to ensure that file modification dates are set accordingly
@@ -65,7 +64,7 @@ namespace Tests
             Directory.CreateDirectory(destinationBaseDirPhotos);
             Directory.CreateDirectory(destinationBaseDirVideos);
             Directory.CreateDirectory(destinationBaseDirSubstitutionTest);
-           
+
             runtimeSettings = new RuntimeSettings(imagesDirectory, destinationBaseDirPhotos,
                 destinationBaseDirVideos);
             runtimeSettings.FilterYear = 2017;
@@ -86,6 +85,37 @@ namespace Tests
         public void ImagesCountIsCorrect()
         {
             Assert.AreEqual(images.Count, 6);
+        }
+
+        [Test]
+        public void TestCreationDate()
+        {
+            // expect creation day 04.02.18.
+            Assert.AreEqual(TestVideo1.CreationDate.Day, 4);
+            Assert.AreEqual(TestVideo1.CreationDate.Month, 2);
+        }
+
+        [Test]
+        public void TestDestinationImage()
+        {
+            var destination = new Destination(TestImage1, destinationBaseDirPhotos, destinationBaseDirVideos);
+
+            Assert.That(destination.Path,
+                Is.EqualTo(Path.Combine(
+                    Path.Combine(destinationBaseDirPhotos, TestImage1.MediaFileYear, TestImage1.MediaFileMonth),
+                    TestImage1.FileName)));
+        }
+
+        [Test]
+        public void TestDestinationVideo()
+        {
+            var destination = new Destination(TestVideo1, destinationBaseDirPhotos, destinationBaseDirVideos);
+
+
+            Assert.That(destination.Path,
+                Is.EqualTo(Path.Combine(
+                    Path.Combine(destinationBaseDirVideos, TestVideo1.MediaFileYear, TestVideo1.MediaFileMonth),
+                    TestVideo1.FileName)));
         }
 
         [Test]
@@ -111,6 +141,25 @@ namespace Tests
         }
 
         [Test]
+        public void TestFilesAreTheSameButContentsDifferException()
+        {
+            const string exceptionMessage = "Oh no, files are the same, but contents are not";
+            var exception =
+                Assert.Throws<FilesAreTheSameButContentsDifferException>(() =>
+                    throw new FilesAreTheSameButContentsDifferException(exceptionMessage));
+            Assert.That(exception.Message, Is.EqualTo(exceptionMessage));
+        }
+
+        [Test]
+        public void TestFilesAreTheSameException()
+        {
+            const string exceptionMessage = "Oh no, files are the same";
+            var exception =
+                Assert.Throws<FilesAreTheSameException>(() => throw new FilesAreTheSameException(exceptionMessage));
+            Assert.That(exception.Message, Is.EqualTo(exceptionMessage));
+        }
+
+        [Test]
         public void TestFilteringByYear()
         {
             var imagesFiltered = Images.FilterImagesByDate(images, 2017, 0, 0);
@@ -122,6 +171,13 @@ namespace Tests
         {
             var imagesFiltered = Images.FilterImagesByDate(images, 2017, 2, 0);
             Assert.AreEqual(2, imagesFiltered.Count);
+        }
+
+        [Test]
+        public void TestFilteringByYearAndMonthAndDay()
+        {
+            var imagesFiltered = Images.FilterImagesByDate(images, 2017, 1, 10);
+            Assert.AreEqual(1, imagesFiltered.Count);
         }
 
         [Test]
@@ -146,13 +202,6 @@ namespace Tests
         }
 
         [Test]
-        public void TestFilteringByYearAndMonthAndDay()
-        {
-            var imagesFiltered = Images.FilterImagesByDate(images, 2017, 1, 10);
-            Assert.AreEqual(1, imagesFiltered.Count);
-        }
-
-        [Test]
         public void TestFindImagesFiltered()
         {
             var images = Images.FindImagesFiltered(runtimeSettings);
@@ -169,70 +218,6 @@ namespace Tests
             runtimeSettings.FilterMonth = 1;
             var images = Images.FindImagesFiltered(runtimeSettings);
             Assert.AreEqual(0, images.Count);
-        }
-
-        [Test]
-        public void TestRuntimeSettingsFilterSubstitution()
-        {
-            string[] args = {"something", "cool"};
-            var options = new Options();
-            var optionsParseSuccess = Parser.Default.ParseArguments(args, options);
-            runtimeSettings = new RuntimeSettings(imagesDirectory, destinationBaseDirPhotos,
-                destinationBaseDirVideos);
-            // test filter substitution
-            options.FilterDay = 1;
-            Assert.AreNotEqual(runtimeSettings.FilterDay, options.FilterDay);
-            runtimeSettings.Activate(options);
-            // now after substituion they will be equal
-            Assert.AreEqual(runtimeSettings.FilterDay, options.FilterDay);
-
-        }
-        [Test]
-        public void TestRuntimeSettingsOptionsImagesSourcePathSubstitution()
-        {
-            string[] args = { "something", "cool" };
-            var options = new Options();
-            var optionsParseSuccess = Parser.Default.ParseArguments(args, options);
-            runtimeSettings = new RuntimeSettings(imagesDirectory, destinationBaseDirPhotos,
-                destinationBaseDirVideos);
-            // test options substitution by overriding imagesSourcePath
-            options.ImagesSourcePath = imagesDirectory2;
-            Assert.AreNotEqual(runtimeSettings.FullPathToMedia, options.ImagesSourcePath);
-            runtimeSettings.Activate(options);
-            // now after substituion they will be equal
-            Assert.AreEqual(runtimeSettings.FullPathToMedia, options.ImagesSourcePath);
-
-
-        }
-        [Test]
-        public void TestRuntimeSettingsOptionsDestinationBaseDirSubstitution()
-        {
-            string[] args = { "something", "cool" };
-            var options = new Options();
-            var optionsParseSuccess = Parser.Default.ParseArguments(args, options);
-            runtimeSettings = new RuntimeSettings(imagesDirectory, destinationBaseDirPhotos,
-                destinationBaseDirVideos);
-            // test options substitution by overriding imagesSourcePath
-            options.ImagesDestinationPath = destinationBaseDirSubstitutionTest;
-            Assert.AreNotEqual(runtimeSettings.DestinationBaseDirPhotos, options.ImagesDestinationPath);
-            runtimeSettings.Activate(options);
-            // now after substituion they will be equal
-            Assert.AreEqual(runtimeSettings.DestinationBaseDirPhotos, options.ImagesDestinationPath);
-        }
-
-        [Test]
-        public void TestRuntimeSettingsActivateCheckThatPathsExist()
-        {
-            string[] args = { "something", "cool" };
-            var options = new Options();
-            var optionsParseSuccess = Parser.Default.ParseArguments(args, options);
-            runtimeSettings = new RuntimeSettings(imagesDirectory, destinationBaseDirPhotos,
-                destinationBaseDirVideos);
-            // use defined but non-existant directory
-            options.ImagesDestinationPath = destinationBaseDirSubstitutionTest2;
-            var exception =
-                Assert.Throws<DirectoryNotFoundException>(() => runtimeSettings.Activate(options));
-            Assert.That(exception.Message, Is.EqualTo($"Directory {destinationBaseDirSubstitutionTest2} not found."));
         }
 
         [Test]
@@ -344,7 +329,8 @@ namespace Tests
             Images.CreateDirectoryIfNotExists(destination.Directory);
             // copy image1 to image2 destination, this way creating situation where destination image exists with same name but the contents are different
             File.Copy(TestImage1.FilePath, destination.Path);
-            Assert.Throws<FilesAreTheSameButContentsDifferException>(() => Images.Move(TestImage2, destinationBaseDirPhotos, destinationBaseDirVideos, false));
+            Assert.Throws<FilesAreTheSameButContentsDifferException>(() =>
+                Images.Move(TestImage2, destinationBaseDirPhotos, destinationBaseDirVideos, false));
         }
 
         [Test]
@@ -356,47 +342,66 @@ namespace Tests
         }
 
         [Test]
-        public void TestFilesAreTheSameException()
+        public void TestRuntimeSettingsActivateCheckThatPathsExist()
         {
-            const string exceptionMessage = "Oh no, files are the same";
+            string[] args = {"something", "cool"};
+            var options = new Options();
+            var optionsParseSuccess = Parser.Default.ParseArguments(args, options);
+            runtimeSettings = new RuntimeSettings(imagesDirectory, destinationBaseDirPhotos,
+                destinationBaseDirVideos);
+            // use defined but non-existant directory
+            options.ImagesDestinationPath = destinationBaseDirSubstitutionTest2;
             var exception =
-                Assert.Throws<FilesAreTheSameException>(() => throw new SortPicsLib.Images.FilesAreTheSameException(exceptionMessage));
-            Assert.That(exception.Message, Is.EqualTo(exceptionMessage));
+                Assert.Throws<DirectoryNotFoundException>(() => runtimeSettings.Activate(options));
+            Assert.That(exception.Message, Is.EqualTo($"Directory {destinationBaseDirSubstitutionTest2} not found."));
         }
 
         [Test]
-        public void TestFilesAreTheSameButContentsDifferException()
+        public void TestRuntimeSettingsFilterSubstitution()
         {
-            const string exceptionMessage = "Oh no, files are the same, but contents are not";
-            var exception =
-                Assert.Throws<FilesAreTheSameButContentsDifferException>(() => throw new SortPicsLib.Images.FilesAreTheSameButContentsDifferException(exceptionMessage));
-            Assert.That(exception.Message, Is.EqualTo(exceptionMessage));
+            string[] args = {"something", "cool"};
+            var options = new Options();
+            var optionsParseSuccess = Parser.Default.ParseArguments(args, options);
+            runtimeSettings = new RuntimeSettings(imagesDirectory, destinationBaseDirPhotos,
+                destinationBaseDirVideos);
+            // test filter substitution
+            options.FilterDay = 1;
+            Assert.AreNotEqual(runtimeSettings.FilterDay, options.FilterDay);
+            runtimeSettings.Activate(options);
+            // now after substituion they will be equal
+            Assert.AreEqual(runtimeSettings.FilterDay, options.FilterDay);
         }
 
         [Test]
-        public void TestDestinationImage()
+        public void TestRuntimeSettingsOptionsDestinationBaseDirSubstitution()
         {
-            var destination = new Destination(TestImage1, destinationBaseDirPhotos, destinationBaseDirVideos);
-           
-            Assert.That(destination.Path, Is.EqualTo(System.IO.Path.Combine(System.IO.Path.Combine(destinationBaseDirPhotos, TestImage1.MediaFileYear, TestImage1.MediaFileMonth), TestImage1.FileName)));
+            string[] args = {"something", "cool"};
+            var options = new Options();
+            var optionsParseSuccess = Parser.Default.ParseArguments(args, options);
+            runtimeSettings = new RuntimeSettings(imagesDirectory, destinationBaseDirPhotos,
+                destinationBaseDirVideos);
+            // test options substitution by overriding imagesSourcePath
+            options.ImagesDestinationPath = destinationBaseDirSubstitutionTest;
+            Assert.AreNotEqual(runtimeSettings.DestinationBaseDirPhotos, options.ImagesDestinationPath);
+            runtimeSettings.Activate(options);
+            // now after substituion they will be equal
+            Assert.AreEqual(runtimeSettings.DestinationBaseDirPhotos, options.ImagesDestinationPath);
         }
+
         [Test]
-        public void TestCreationDate()
+        public void TestRuntimeSettingsOptionsImagesSourcePathSubstitution()
         {
-            // expect creation day 04.02.18.
-            Assert.AreEqual(TestVideo1.CreationDate.Day, 4);
-            Assert.AreEqual(TestVideo1.CreationDate.Month, 2);
-
+            string[] args = {"something", "cool"};
+            var options = new Options();
+            var optionsParseSuccess = Parser.Default.ParseArguments(args, options);
+            runtimeSettings = new RuntimeSettings(imagesDirectory, destinationBaseDirPhotos,
+                destinationBaseDirVideos);
+            // test options substitution by overriding imagesSourcePath
+            options.ImagesSourcePath = imagesDirectory2;
+            Assert.AreNotEqual(runtimeSettings.FullPathToMedia, options.ImagesSourcePath);
+            runtimeSettings.Activate(options);
+            // now after substituion they will be equal
+            Assert.AreEqual(runtimeSettings.FullPathToMedia, options.ImagesSourcePath);
         }
-        [Test]
-        public void TestDestinationVideo()
-        {
-            var destination = new Destination(TestVideo1, destinationBaseDirPhotos, destinationBaseDirVideos);
-           
-
-            Assert.That(destination.Path, Is.EqualTo(System.IO.Path.Combine(System.IO.Path.Combine(destinationBaseDirVideos, TestVideo1.MediaFileYear, TestVideo1.MediaFileMonth), TestVideo1.FileName)));
-        }
-
-
     }
 }

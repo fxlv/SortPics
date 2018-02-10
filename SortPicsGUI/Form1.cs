@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SortPicsGUI
@@ -22,14 +15,13 @@ namespace SortPicsGUI
         {
             status_label.Text = msg;
         }
+
         private void FindPics_Click(object sender, EventArgs e)
         {
             SetStatus("Looking for pics...");
-            var pics =  Program.FindPics();
+            var pics = Program.FindPics();
             foreach (var pic in pics)
-            {
                 listBox1.Items.Add(pic);
-            }
             SetStatus("Search complete.");
             moveButton.Enabled = true;
         }
